@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import router from './routes/userRoutes.js';
+import locationRouter from './routes/locationRoutes.js';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.get('/', (req, res) =>{
     res.send('app runningg....')
 })
 
+app.use('/location', locationRouter)
 app.use('/users', router);
 
 
