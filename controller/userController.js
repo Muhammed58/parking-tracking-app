@@ -181,7 +181,7 @@ export const updateUser = asyncHandler(async (req, res) =>{
         res.json({
             _id: updatedUser._id,
             name: updatedUser.name,
-            emai: updatedUser.isAdmin,
+            email: updatedUser.isAdmin,
         });
     } else {
         res.status(404);

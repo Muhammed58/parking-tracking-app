@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font'
-import { faSearch, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { SendCode, EnterCode, NewPassword, LoginPanel } from './forgotPassword.js'
 import { TouchableOpacity,ImageBackground, 
         Dimensions, Text, View, StyleSheet,
         Image, Keyboard, TouchableWithoutFeedback,
@@ -27,72 +28,62 @@ export default function Home({navigation}) {
     const manImage = require('../assets/images/man.png')
     const womenImage = require('../assets/images/women.png')
 
+    //isLoading page
+    const [isLoading, setisLoading] = useState(true)
+
+    useEffect(() => {
+        setTimeout(() => setisLoading(true), 2000);
+    }, [])
+
     // Closes the keyboard when clicking anywhere other than input
     const KeyboardDismiss = ({ children }) => (
         <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() }>
             { children }
         </TouchableWithoutFeedback>
     );
+    
+    //change panel from sign in to reset password
+    const [forgotPassword, setforgotPassword] = useState(false)
 
 
     if (!loaded) {
         return null;
     }
     return (
-        <KeyboardDismiss>
+        <>
+        {isLoading === false ? ( <View style={{top:50, left:50}}><Text>LOADING TEST PAGE</Text></View>)
+        
+        :(<KeyboardDismiss>
 
         <View style={styles.mainContainer}>
             <StatusBar translucent={true} backgroundColor="transparent"/>
-            <ImageBackground source={image} style={styles.backgroundImage} resizeMode="cover" >
 
-                    <Image style={styles.womenImage} source={womenImage}/>
-                    <Image style={styles.manImage} source={manImage}/>
-                   
-                    {/* Email and password Auth */}
-                    <KeyboardAvoidingView 
-                        style={styles.authContainer}
-                        keyboardVerticalOffset={85}
-                        behavior={ Platform.OS === 'ios'? 'position': "height"} >
+            <ImageBackground source={image} style={styles.backgroundImage} resizeMode="cover">
+         
+                  
+                <Image style={styles.womenImage} source={womenImage}/>
+                <Image style={styles.manImage} source={manImage}/>
+           
+             {!forgotPassword ? (
+                 <LoginPanel name='LoginPanel' displayForgotPassword={setforgotPassword}/>
 
-                        <View style={styles.input1}>
+             ):(
+                 
+                 <SendCode name='SendCode' displayForgotPassword={setforgotPassword}/>
+                 )}
 
+               
 
-                                {/* Email input */}
-                                <View style={styles.emailInputBox}>
-                                    <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
-                                    <TextInput
-                                        style={styles.emailInput}
-                                        placeholder={"Type your email"}
-                                        textContentType="emailAddress"
-                                        autoCapitalize="none"
-                                        />
-                                </View>
+            {/*     <EnterCode name='EnterCode'/>
+                        
+                <NewPassword name='NewPassword'/>  */}
+               
 
-                                {/* Password Input */}
-
-                                <View style={styles.passwordInputBox}>
-                                    <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
-                                    <TextInput
-                                        textContentType ="password"
-                                        secureTextEntry = {true}
-                                        style={styles.passwordInput}
-                                        placeholder={"Type your password"}
-                                        />
-                                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                                </View>
-
-                                <TouchableOpacity style={styles.signInButton} activeOpacity={.8} >
-                                    <Text style={styles.buttonText}>Sign In</Text>
-                                </TouchableOpacity>
-                                
-                                <Text style={styles.signUpText}>Don't have an account?
-                                    <Text style={styles.signUpText2}>  Sign Up</Text> 
-                                </Text>
-                            </View>
-                        </KeyboardAvoidingView>
             </ImageBackground>
         </View>
-        </KeyboardDismiss>
+        </KeyboardDismiss> )
+        }
+        </>
     )
 }
 
@@ -113,43 +104,40 @@ const styles = StyleSheet.create({
 
     backgroundImage:{
         flex: 1,
-        width: "100%",
-        height: "60%",
+        width: width * 1,
+        height: height * 0.6,
         alignItems: "center",
         justifyContent: "center",
     },
 
     manImage:{
-        width: "70%",
-        height:"50%",
-        right: width * -0.3,
-        top: height * -0.26,
-        resizeMode:"contain",
+        width: width * 1,
+        height:height * 0.5,
+        resizeMode: "contain",
+        right: Platform.OS === "ios" ? width * -0.25 : width * -0.25,
+        top: Platform.OS === "ios" ? height * -0.20 : height * -0.20,
     },
 
     womenImage:{
-        width: "70%",
-        height: "50%",
+        width: width * 1,
+        height: height * 0.45,
         resizeMode:"contain",
-        right: width * 0.22,
-        top: height * 0.25,
+        right: Platform.OS === "ios" ? width * 0.25 : width * 0.25,
+        top: Platform.OS === "ios" ? height * 0.25 : height * 0.24,
     },
 
     authContainer:{
         flex:1,
         elevation:3,
         width:"100%",
-        bottom: height * 0.11,
-        left: "2%",
-        justifyContent:"flex-start",
-        backgroundColor: "red",
+        paddingLeft: "1%",
     },
 
     input1:{
         position: "relative",
-        width: "96%",
+        width: "99%",
         height: height * 0.34,
-        top: height * -0.25,
+        top: Platform.OS === "ios" ? height * -0.30: height * -0.30,
         borderRadius: 40,
         backgroundColor: "white",
         shadowColor: "#000",
@@ -186,7 +174,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: "65%",
         height: "70%",
-        fontSize: 25,
+        fontSize: 20,
         fontFamily:"Rakkas",
         left:"25%",
     },
@@ -194,6 +182,7 @@ const styles = StyleSheet.create({
     emailIcon:{
         position:"absolute",
         left: 20,
+        opacity: 0.7,
     },
 
     passwordInputBox:{
@@ -218,7 +207,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: "65%",
         height: "70%",
-        fontSize: 25,
+        fontSize: 20,
         fontFamily:"Rakkas",
         left:"25%",
     },
@@ -226,6 +215,7 @@ const styles = StyleSheet.create({
     passwordIcon:{
         position:"absolute",
         left: 20,
+        opacity: 0.7,
     },
 
     forgotPassword:{
