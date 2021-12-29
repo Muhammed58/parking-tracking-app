@@ -1,29 +1,118 @@
 import React, { useState, useEffect }  from 'react';
 import { faLock, faEnvelope, faCaretLeft, faUndo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import CodeInput from 'react-native-code-input';
-import { TouchableOpacity,ImageBackground, 
+import axios from 'axios';
+
+import {
+    CodeField,
+    Cursor,
+    useBlurOnFulfill,
+    useClearByFocusCell,
+  } from 'react-native-confirmation-code-field';
+
+import { TouchableOpacity, 
     Dimensions, Text, View, StyleSheet,
     Image, Keyboard, TouchableWithoutFeedback,
-    TextInput, KeyboardAvoidingView, Platform
+    TextInput, KeyboardAvoidingView, Platform,
+    LayoutAnimation, UIManager, ActivityIndicator
      } from 'react-native';
 
 
 
+     //Layout animasiton setting for android
+     if (
+        Platform.OS === 'android' &&
+        UIManager.setLayoutAnimationEnabledExperimental
+      ) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+      }
+     
+          //background man and women images path
+    const manImage = require('../assets/images/man.png')
+    const womenImage = require('../assets/images/women.png')
 
-export const LoginPanel = (props) =>{
-   
+export const LoginPanel = ({navigation}) =>{
+    //Hooks for layout animations of password reset boxes
+    const [loginBoxPosition, setLoginBoxPosition] = useState("left");
+    const [sendCodePosition, setSendCodePosition] = useState("right");
+    const [enterCodePosition, setEnterCodePosition] = useState("right");
+    
+    
+    //login info
+    const [enterEmail, setEnterEmail] = useState("")
+    const [loginPassword, setPassword] = useState("")
+    const [invalidErr, setInvalidErr] = useState(false)
+
+    //spinner
+    const [loadingSpinner, setLoadingSpinner] = useState(false)
+    
+
+    //handle Sign in button 
+    const handleSignIn = async() => {
+       /*  //start loading spinner
+        setLoadingSpinner(true)
+
+        //send login info to server
+        await axios.post('http://localhost:8080/users/login', {
+            email: enterEmail,
+            password: loginPassword
+        })
+        .then((res)=>{
+            alert("Token: " + res.data.token)
+            setInvalidErr(false)
+        })
+        .catch((err)=>{
+            setInvalidErr(true)
+        }).then(()=>{
+            setLoadingSpinner(false)
+        }) */
+        navigation.navigate('MainPage') 
+    }
+
+
+        //Code  confirmation screen
+        const CELL_COUNT = 5;
+        const [value, setValue] = useState('');
+        const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+        const [ props, getCellOnLayoutHandler ] = useClearByFocusCell({
+          value,
+          setValue,
+        });
+
+        //set box layout animations
+        const toggleLoginBox = () =>{
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+            setLoginBoxPosition(loginBoxPosition === 'left'? 'right' : 'left')
+        }
+        
+        const toggleSendCodeBox = () =>{
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+            setSendCodePosition(sendCodePosition === 'right'? 'left' : 'right')
+        }
+
+        const toggleEnterCodeBox = () =>{
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+            setEnterCodePosition(enterCodePosition === 'right' ? 'left' : 'right')
+        }
+        
+
 return (
-    <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() }>
+    <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() } >
 
                     <KeyboardAvoidingView       
                         style={styles.authContainer}
                         keyboardVerticalOffset={5}
-                        behavior={ Platform.OS === 'ios'? 'position': "position"} >
+                        behavior={ Platform.OS === 'ios'? 'position': 'position'} >
                          
-                        {/* Email and password Auth */}
-                        <View style={styles.input}>
-
+                         <Image style={styles.womenImage} source={womenImage}/>
+                         <Image style={styles.manImage} source={manImage}/>
+           
+        {/* Email and password Auth */}
+                        <View style={[loadingSpinner === false ? styles.hiddenLoadingSpinner : styles.loadingSpinner]}>
+                            <ActivityIndicator size="large" color= "#064635"/>
+                        </View>
+                        <View style={[styles.input, loginBoxPosition === 'left'? styles.moveLeft : styles.moveRight]}>
+                                <Text style={[invalidErr === true ? styles.invalidErr: styles.validlogin]}>Invalid Email or Password</Text>
                                 {/* Email input */}
                                 <View style={styles.emailInputBox1}>
                                     <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
@@ -32,6 +121,8 @@ return (
                                         placeholder={"Type your email"}
                                         textContentType="emailAddress"
                                         autoCapitalize="none"
+                                        onChangeText={ value => setEnterEmail(value)}
+                                        value={enterEmail}
                                         />
                                 </View>
 
@@ -42,43 +133,32 @@ return (
                                         textContentType ="password"
                                         secureTextEntry = { true }
                                         style={styles.passwordInput}
+                                        onChangeText={value2 => setPassword(value2)}
                                         placeholder={"Type your password"}
+                                        value={ loginPassword }
                                         />
-
-                                        <TouchableOpacity style={styles.forgotPassword}>
-                                            <Text style={styles.forgotPassword} onPress={() => props.displayForgotPassword(true)}>Forgot Password?</Text>
-                                        </TouchableOpacity>
                                 </View>
+                                
+                                <TouchableOpacity style={styles.forgotPassword} onPress={()=> {toggleLoginBox(); toggleSendCodeBox(); setEnterEmail('')}} >
+                                    <Text style={styles.forgotPasswordFont}>Forgot Password?</Text>
+                                </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.signInButton} activeOpacity={.8} >
+                                <TouchableOpacity style={styles.signInButton} activeOpacity={.8} onPress={ ()=>{handleSignIn(); setPassword(''); setEnterEmail('')}} >
                                     <Text style={styles.buttonText}>Sign In</Text>
                                 </TouchableOpacity>
                                 
                                 <Text style={styles.signUpText}>Don't have an account?
-                                    <Text style={styles.signUpText2}>  Sign Up</Text> 
+                                    <Text style={styles.signUpText2}> Sign Up </Text> 
                                 </Text>
                             </View>
-                        </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
-
-)};
 
 
-
-export const SendCode = (props) =>{
-return(
-    <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() }>
-         <KeyboardAvoidingView 
-                        style={styles.authContainer}
-                        keyboardVerticalOffset={5}
-                        behavior={ Platform.OS === 'ios'? 'position': "position"} >
-                         
-                        {/* Email and password Auth */}
-                        <View style={styles.input1}>
-                            <View style={styles.goBackContainer}>
+        {/* SendCode to the email */}
+                        <View style={[styles.input1, styles.box, sendCodePosition === 'right'? null : styles.moveLeft]}>
+                            <TouchableOpacity style={styles.goBackContainer} onPress={()=> {toggleLoginBox(); toggleSendCodeBox()}}>
                                 <FontAwesomeIcon icon={ faCaretLeft } size ={ 35 } style={ styles.goBackIcon }/>
-                                <Text style={styles.goBackText} onPress={()=>{props.displayForgotPassword(false)}} >Go Back!</Text>
-                            </View>
+                                <Text style={styles.goBackText} >Go Back!</Text>
+                            </TouchableOpacity>
                                 {/* Email input */}
                                 <View style={styles.emailInputBox}>
                                     <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
@@ -90,96 +170,52 @@ return(
                                         />
                                 </View>
 
-                                <TouchableOpacity style={styles.sendCodeButton} activeOpacity={.8} >
+                                <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{toggleEnterCodeBox(); toggleSendCodeBox()}} activeOpacity={.8} >
                                     <Text style={styles.buttonText}>Send Code</Text>
                                 </TouchableOpacity>
                                
                             </View>
-                        </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
-)};
 
-
-//Set and check pin code
-/* const [pinCode, setPinCode] = useState(""); */
-
-export const EnterCode = () =>(
-    <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() }>
-         <KeyboardAvoidingView 
-                        style={styles.authContainer}
-                        keyboardVerticalOffset={5}
-                        behavior={ Platform.OS === 'ios'? 'position': "position"} >
-                         
-                        {/* Email and password Auth */}
-                        <View style={styles.input2}>
-                            <View style={styles.goBackContainer}>
+        {/* enter code from email */}
+                        <View style={[styles.input2, enterCodePosition === 'right'? null : styles.moveLeft]}>
+                        <TouchableOpacity style={styles.goBackContainer} onPress={()=> {toggleLoginBox(); toggleEnterCodeBox(); setValue()}}>
                                 <FontAwesomeIcon icon={ faCaretLeft } size ={ 35 } style={ styles.goBackIcon }/>
-                                <Text style={styles.goBackText}>Go Back!</Text>
-                            </View>
+                                <Text style={styles.goBackText} >Go Back!</Text>
+                            </TouchableOpacity>
                                 {/* Email input */}
-                                <View style={styles.emailInputBox}>
-                                    <CodeInput
-                                          size={50}
-                                          secureTextEntry
-                                          autoFocus={false}
-                                          activeColor='black'
-                                          inactiveColor='gray'
-                                          inputPosition='center'
-                                          containerStyle={{ marginTop: 5 }}
-                                          codeInputStyle={{ borderWidth: 1.5, borderRadius:10 }}
-                                        />
+                                <View style={styles.enterCodeBox}>
+                                <CodeField
+                                    ref={ref}
+                                    {...props}
+                                    // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
+                                    value={value}
+                                    onChangeText={setValue}
+                                    cellCount={CELL_COUNT}
+                                    keyboardType='number-pad'
+                                    rootStyle={styles.codeFieldRoot}
+                                    textContentType="oneTimeCode"
+                                    renderCell={({index, symbol, isFocused}) => (
+                                    <Text
+                                        key={index}
+                                        style={[styles.cell, isFocused && styles.focusCell]}
+                                        onLayout={getCellOnLayoutHandler(index)}>
+                                        {symbol || (isFocused ? <Cursor /> : null)}
+                                    </Text>
+                                    )}
+                                />
+                                  
                                 </View>
 
-                                <TouchableOpacity style={styles.sendCodeButton} activeOpacity={.8} >
+                                <TouchableOpacity style={styles.sendCodeButton} onPress={()=> { alert(value); setValue()}} activeOpacity={.8} >
                                     <Text style={styles.buttonText}>Enter Code</Text>
                                 </TouchableOpacity>
                                
                             </View>
                         </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
-);
-export const NewPassword = () =>(
-    <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() }>
-         <KeyboardAvoidingView 
-                        style={styles.authContainer}
-                        keyboardVerticalOffset={5}
-                        behavior={ Platform.OS === 'ios'? 'position': "position"} >
-                         
-                        {/* Email and password Auth */}
-                        <View style={styles.input3}>
-                            <View style={styles.goBackContainer}>
-                                <FontAwesomeIcon icon={ faCaretLeft } size ={ 35 } style={ styles.goBackIcon }/>
-                                <Text style={styles.goBackText}>Go Back!</Text>
-                            </View>
+        </TouchableWithoutFeedback>
 
-                                 {/* Password Input */}
-                                 <View style={styles.passwordInputBox}>
-                                    <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
-                                    <TextInput
-                                        textContentType ="password"
-                                        secureTextEntry = {true}
-                                        style={styles.passwordInput}
-                                        placeholder={"New password"}
-                                        />
-                                </View>
-                                 <View style={styles.passwordInputBox2}>
-                                    <FontAwesomeIcon icon={ faUndo } size ={ 25 } style={ styles.passwordIcon }/>
-                                    <TextInput
-                                        textContentType ="password"
-                                        secureTextEntry = {true}
-                                        style={styles.passwordInput}
-                                        placeholder={"Confirm new password"}
-                                        />
-                                </View>
+)};
 
-                                <TouchableOpacity style={styles.sendCodeButton2} activeOpacity={.8} >
-                                    <Text style={styles.buttonText}>Submit</Text>
-                                </TouchableOpacity>
-                               
-                            </View>
-                        </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
-);
 
 
 
@@ -189,6 +225,13 @@ export const NewPassword = () =>(
 
 
 const styles = StyleSheet.create({
+    moveRight: {
+        left: width * 1.1
+      },
+
+    moveLeft:{
+        left: width * 0
+    },
 
     authContainer:{
         flex:1,
@@ -197,11 +240,36 @@ const styles = StyleSheet.create({
         paddingLeft: "1%",
     },
 
+    hiddenLoadingSpinner:{
+        display:'none',
+    },
+
+    loadingSpinner:{
+        position: "absolute",
+        width: "99%",
+        opacity:0.5,
+        height: height * 0.37,
+        top: Platform.OS === "ios" ? height * 0.60: height * 0.60,
+        borderRadius: 40,
+        backgroundColor: "white",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        elevation:5,
+        zIndex:1,
+        shadowOpacity: 0.39,
+        shadowRadius: 8.30,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
     input:{
         position: "relative",
         width: "99%",
-        height: height * 0.34,
-        top: Platform.OS === "ios" ? height * -0.30: height * -0.30,
+        height: height * 0.37,
+        top: Platform.OS === "ios" ? height * -0.35: height * -0.35,
         borderRadius: 40,
         backgroundColor: "white",
         shadowColor: "#000",
@@ -214,6 +282,18 @@ const styles = StyleSheet.create({
         shadowRadius: 8.30,
         justifyContent: "center",
         alignItems: "center",
+    },
+
+    invalidErr:{
+        position:"absolute",
+        fontSize:17,
+        color:"red",
+        fontFamily:"Rakkas",
+        top: width * -0.006,
+    },
+
+    validlogin:{
+        display:'none',
     },
 
     emailInputBox1:{
@@ -262,7 +342,7 @@ const styles = StyleSheet.create({
             width: 0,
             height: 3,
         },
-        elevation:3,
+        elevation:4,
         shadowOpacity: 0.27,
         shadowRadius: 4.65,
     },
@@ -284,11 +364,17 @@ const styles = StyleSheet.create({
 
     forgotPassword:{
         position: "absolute",
+        top: height * 0.20,
+        width: width * 0.4,
+        height: height * 0.05,
+        justifyContent:"center",
+        alignItems:"center",
+    },
+    
+    forgotPasswordFont:{
+        color: "gray",
         fontFamily: "Rakkas",
         fontSize: 15,
-        top: "120%",
-        left: "35%",
-        color: "gray"
     },
 
     signInButton:{
@@ -327,7 +413,8 @@ const styles = StyleSheet.create({
         position: "relative",
         width: "99%",
         height: height * 0.23,
-        top: Platform.OS === "ios" ? height * -0.30: height * -0.30,
+        left: width * 1.1,
+        top: Platform.OS === "ios" ? height * -0.70: height * -0.70,
         borderRadius: 40,
         backgroundColor: "white",
         shadowColor: "#000",
@@ -345,7 +432,8 @@ const styles = StyleSheet.create({
         position: "relative",
         width: "99%",
         height: height * 0.24,
-        top: Platform.OS === "ios" ? height * -0.50: height * -0.30,
+        left: width * 1.1,
+        top: Platform.OS === "ios" ? height * -0.95: height * -0.95,
         borderRadius: 40,
         backgroundColor: "white",
         shadowColor: "#000",
@@ -493,19 +581,77 @@ const styles = StyleSheet.create({
     goBackContainer:{
         position:"absolute",
         top: height * 0.02,
+        left: height * 0.05,
+        height: height *0.04,
+        width: width *0.5,
         justifyContent:"center",
         opacity:0.5,
     },
     
     goBackIcon:{
         position:"absolute",
-        left: height * -0.16,
     },
     
     goBackText:{
+        position:"absolute",
         fontFamily:"Rakkas",
         fontSize: width * 0.05,
-        left: height * -0.1,
-    }
+        left: height * 0.06,
+    },
+
+    manImage:{
+        width: width * 1,
+        height:height * 0.5,
+        resizeMode: "contain",
+        right: Platform.OS === "ios" ? width * -0.25 : width * -0.25,
+        top: Platform.OS === "ios" ? height * -0.20 : height * -0.20,
+    },
+
+    womenImage:{
+        width: width * 1,
+        height: height * 0.45,
+        resizeMode:"contain",
+        right: Platform.OS === "ios" ? width * 0.25 : width * 0.25,
+        top: Platform.OS === "ios" ? height * 0.25 : height * 0.24,
+    },
+
+    enterCodeBox:{
+        position: "absolute",
+        width: "85%",
+        height: "30%",
+        justifyContent: "center",
+        borderRadius: 16,
+        top: height * 0.07,
+    },
+    
+    emailInput:{
+        position: "absolute",
+        width: "65%",
+        height: "70%",
+        fontSize: 20,
+        fontFamily:"Rakkas",
+        left:"25%",
+    },
+
+    codeFieldRoot: {
+        marginTop: 3,
+        justifyContent:'space-evenly'
+    },
+
+    cell: {
+      width: 50,
+      height: 50,
+      lineHeight: Platform.OS === "ios" ? height * 0.06 : height * 0.07,
+      fontSize: 24,
+      borderWidth: 2,
+      borderColor: 'black',
+      overflow:"hidden",
+      backgroundColor:"#FFCC56",
+      borderRadius:10,
+      textAlign: 'center',
+    },
+    focusCell: {
+      borderColor: '#000',
+    },
     
 })
