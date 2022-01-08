@@ -59,6 +59,7 @@ export const authUser = asyncHandler(async (req, res) =>{
 
     if ( user && (await user.matchPassword(password))) {
         res.json({
+            userID:user._id,
             token: generateToken(user._id),
         });
     }   else {
@@ -78,7 +79,8 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     if(user) {
         res.json({
             _id: user._id,
-            name: user.email,
+            name: user.name,
+            email: user.email,
             isAdmin: user.isAdmin,
         });
     } else {

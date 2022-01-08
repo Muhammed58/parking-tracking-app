@@ -2,6 +2,8 @@ import React, { useState, useEffect }  from 'react';
 import { faLock, faEnvelope, faCaretLeft, faUndo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import axios from 'axios';
+import RegisterUser from './registerUser.js';
+import * as SecureStore from 'expo-secure-store';
 
 import {
     CodeField,
@@ -36,7 +38,7 @@ export const LoginPanel = ({navigation}) =>{
     const [loginBoxPosition, setLoginBoxPosition] = useState("left");
     const [sendCodePosition, setSendCodePosition] = useState("right");
     const [enterCodePosition, setEnterCodePosition] = useState("right");
-    
+    const [registerBoxPosition, setregisterBoxPosition] = useState("right")
     
     //login info
     const [enterEmail, setEnterEmail] = useState("")
@@ -46,10 +48,13 @@ export const LoginPanel = ({navigation}) =>{
     //spinner
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     
+    async function save(key, value) {
+        await SecureStore.setItemAsync(key, value);
+      }
 
     //handle Sign in button 
     const handleSignIn = async() => {
-       /*  //start loading spinner
+        //start loading spinner
         setLoadingSpinner(true)
 
         //send login info to server
@@ -58,15 +63,21 @@ export const LoginPanel = ({navigation}) =>{
             password: loginPassword
         })
         .then((res)=>{
-            alert("Token: " + res.data.token)
+            /* alert("Token: " + res.data.token) */
+            navigation.navigate('MainPage', {
+                token: res.data.token,
+            })
+            token = res.data.token
+           
+            save('ahmetToken', token)
+
             setInvalidErr(false)
         })
         .catch((err)=>{
             setInvalidErr(true)
         }).then(()=>{
             setLoadingSpinner(false)
-        }) */
-        navigation.navigate('MainPage') 
+        })
     }
 
 
@@ -104,120 +115,121 @@ return (
                         keyboardVerticalOffset={5}
                         behavior={ Platform.OS === 'ios'? 'position': 'position'} >
                          
-                         <Image style={styles.womenImage} source={womenImage}/>
-                         <Image style={styles.manImage} source={manImage}/>
-           
+                        <Image style={styles.womenImage} source={womenImage}/>
+                        <Image style={styles.manImage} source={manImage}/>
+          
         {/* Email and password Auth */}
                         <View style={[loadingSpinner === false ? styles.hiddenLoadingSpinner : styles.loadingSpinner]}>
                             <ActivityIndicator size="large" color= "#064635"/>
                         </View>
                         <View style={[styles.input, loginBoxPosition === 'left'? styles.moveLeft : styles.moveRight]}>
-                                <Text style={[invalidErr === true ? styles.invalidErr: styles.validlogin]}>Invalid Email or Password</Text>
-                                {/* Email input */}
-                                <View style={styles.emailInputBox1}>
-                                    <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
-                                    <TextInput
-                                        style={styles.emailInput}
-                                        placeholder={"Type your email"}
-                                        textContentType="emailAddress"
-                                        autoCapitalize="none"
-                                        onChangeText={ value => setEnterEmail(value)}
-                                        value={enterEmail}
-                                        />
-                                </View>
-
-                                {/* Password Input */}
-                                <View style={styles.passwordInputBox1}>
-                                    <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
-                                    <TextInput
-                                        textContentType ="password"
-                                        secureTextEntry = { true }
-                                        style={styles.passwordInput}
-                                        onChangeText={value2 => setPassword(value2)}
-                                        placeholder={"Type your password"}
-                                        value={ loginPassword }
-                                        />
-                                </View>
+                            <Text style={[invalidErr === true ? styles.invalidErr: styles.validlogin]}>Invalid Email or Password</Text>
                                 
-                                <TouchableOpacity style={styles.forgotPassword} onPress={()=> {toggleLoginBox(); toggleSendCodeBox(); setEnterEmail('')}} >
-                                    <Text style={styles.forgotPasswordFont}>Forgot Password?</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.signInButton} activeOpacity={.8} onPress={ ()=>{handleSignIn(); setPassword(''); setEnterEmail('')}} >
-                                    <Text style={styles.buttonText}>Sign In</Text>
-                                </TouchableOpacity>
-                                
-                                <Text style={styles.signUpText}>Don't have an account?
-                                    <Text style={styles.signUpText2}> Sign Up </Text> 
-                                </Text>
+                            {/* Email input */}
+                            <View style={styles.emailInputBox1}>
+                                <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
+                                <TextInput
+                                    style={styles.emailInput}
+                                    placeholder={"Type your email"}
+                                    textContentType="emailAddress"
+                                    autoCapitalize="none"
+                                    onChangeText={ value => setEnterEmail(value)}
+                                    value={enterEmail}
+                                    />
                             </View>
 
+                            {/* Password Input */}
+                            <View style={styles.passwordInputBox1}>
+                                <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
+                                <TextInput
+                                    textContentType ="password"
+                                    secureTextEntry = { true }
+                                    style={styles.passwordInput}
+                                    onChangeText={value2 => setPassword(value2)}
+                                    placeholder={"Type your password"}
+                                    value={ loginPassword }
+                                    />
+                            </View>
+                                
+                            <TouchableOpacity style={styles.forgotPassword} onPress={()=> {toggleLoginBox(); toggleSendCodeBox(); setEnterEmail('')}} >
+                                <Text style={styles.forgotPasswordFont}>Forgot Password?</Text>
+                            </TouchableOpacity>
 
+                            <TouchableOpacity style={styles.signInButton} activeOpacity={.8} onPress={ ()=>{handleSignIn(); setPassword(''); setEnterEmail('')}} >
+                                <Text style={styles.buttonText}>Sign In</Text>
+                            </TouchableOpacity>
+                                
+                            <Text style={styles.signUpText}>Don't have an account?
+                                <Text style={styles.signUpText2} onPress={()=> {
+                                                            toggleLoginBox();
+                                                            setregisterBoxPosition( registerBoxPosition === "left" ? "right" : "left")}}> Sign Up </Text> 
+                            </Text>
+                        </View>
+
+                     
         {/* SendCode to the email */}
                         <View style={[styles.input1, styles.box, sendCodePosition === 'right'? null : styles.moveLeft]}>
                             <TouchableOpacity style={styles.goBackContainer} onPress={()=> {toggleLoginBox(); toggleSendCodeBox()}}>
                                 <FontAwesomeIcon icon={ faCaretLeft } size ={ 35 } style={ styles.goBackIcon }/>
                                 <Text style={styles.goBackText} >Go Back!</Text>
                             </TouchableOpacity>
-                                {/* Email input */}
-                                <View style={styles.emailInputBox}>
-                                    <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
-                                    <TextInput
-                                        style={styles.emailInput}
-                                        placeholder={"Type your email"}
-                                        textContentType="emailAddress"
-                                        autoCapitalize="none"
-                                        />
-                                </View>
-
-                                <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{toggleEnterCodeBox(); toggleSendCodeBox()}} activeOpacity={.8} >
-                                    <Text style={styles.buttonText}>Send Code</Text>
-                                </TouchableOpacity>
-                               
+                            
+                            {/* Email input */}
+                            <View style={styles.emailInputBox}>
+                                <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
+                                <TextInput
+                                    style={styles.emailInput}
+                                    placeholder={"Type your email"}
+                                    textContentType="emailAddress"
+                                    autoCapitalize="none"
+                                    />
                             </View>
 
+                            <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{toggleEnterCodeBox(); toggleSendCodeBox()}} activeOpacity={.8} >
+                                <Text style={styles.buttonText}>Send Code</Text>
+                            </TouchableOpacity>  
+                        </View>
+                       
         {/* enter code from email */}
                         <View style={[styles.input2, enterCodePosition === 'right'? null : styles.moveLeft]}>
-                        <TouchableOpacity style={styles.goBackContainer} onPress={()=> {toggleLoginBox(); toggleEnterCodeBox(); setValue()}}>
+                            <TouchableOpacity style={styles.goBackContainer} onPress={()=> {toggleLoginBox(); toggleEnterCodeBox(); setValue()}}>
                                 <FontAwesomeIcon icon={ faCaretLeft } size ={ 35 } style={ styles.goBackIcon }/>
                                 <Text style={styles.goBackText} >Go Back!</Text>
                             </TouchableOpacity>
                                 {/* Email input */}
-                                <View style={styles.enterCodeBox}>
-                                <CodeField
-                                    ref={ref}
-                                    {...props}
-                                    // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
-                                    value={value}
-                                    onChangeText={setValue}
-                                    cellCount={CELL_COUNT}
-                                    keyboardType='number-pad'
-                                    rootStyle={styles.codeFieldRoot}
-                                    textContentType="oneTimeCode"
-                                    renderCell={({index, symbol, isFocused}) => (
-                                    <Text
-                                        key={index}
-                                        style={[styles.cell, isFocused && styles.focusCell]}
-                                        onLayout={getCellOnLayoutHandler(index)}>
-                                        {symbol || (isFocused ? <Cursor /> : null)}
-                                    </Text>
-                                    )}
-                                />
+                            <View style={styles.enterCodeBox}>
+                                    <CodeField
+                                        ref={ref}
+                                        {...props}
+                                        // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
+                                        value={value}
+                                        onChangeText={setValue}
+                                        cellCount={CELL_COUNT}
+                                        keyboardType='number-pad'
+                                        rootStyle={styles.codeFieldRoot}
+                                        textContentType="oneTimeCode"
+                                        renderCell={({index, symbol, isFocused}) => (
+                                        <Text
+                                            key={index}
+                                            style={[styles.cell, isFocused && styles.focusCell]}
+                                            onLayout={getCellOnLayoutHandler(index)}>
+                                            {symbol || (isFocused ? <Cursor /> : null)}
+                                        </Text>
+                                    )}/>
                                   
-                                </View>
-
-                                <TouchableOpacity style={styles.sendCodeButton} onPress={()=> { alert(value); setValue()}} activeOpacity={.8} >
-                                    <Text style={styles.buttonText}>Enter Code</Text>
-                                </TouchableOpacity>
-                               
                             </View>
-                        </KeyboardAvoidingView>
+                                    <TouchableOpacity style={styles.sendCodeButton} onPress={()=> { alert(value); setValue()}} activeOpacity={.8} >
+                                        <Text style={styles.buttonText}>Enter Code</Text>
+                                    </TouchableOpacity>
+                            </View>
+
+                            {/* Call Register User Component  */}
+                            <RegisterUser boxPosition={registerBoxPosition} loginbox={setLoginBoxPosition}/>
+
+                    </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
 
 )};
-
-
-
 
  //Get screen height and width for responsive
  const width = Dimensions.get('window').width;
@@ -466,20 +478,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4.65,
     },
     
-    emailInput:{
-        position: "absolute",
-        width: "65%",
-        height: "70%",
-        fontSize: 20,
-        fontFamily:"Rakkas",
-        left:"25%",
-    },
-    
-    emailIcon:{
-        position:"absolute",
-        left: 20,
-        opacity: 0.7,
-    },
     sendCodeButton:{
         position: "absolute",
         top:"68%",
@@ -489,32 +487,6 @@ const styles = StyleSheet.create({
         alignItems:"center",
         backgroundColor:"black",
         justifyContent:"center",
-    },
-    
-    buttonText:{
-        position:"absolute",
-        fontFamily:"Rakkas",
-        color:"#FFCC56",
-        fontSize:25,
-    },
-    
-    input3:{
-        position: "relative",
-        width: "99%",
-        height: height * 0.35,
-        top: Platform.OS === "ios" ? height * -0.85: height * -0.30,
-        borderRadius: 40,
-        backgroundColor: "white",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 6,
-        },
-        elevation:3,
-        shadowOpacity: 0.39,
-        shadowRadius: 8.30,
-        justifyContent: "center",
-        alignItems: "center",
     },
     
     passwordInputBox:{
@@ -534,49 +506,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.27,
         shadowRadius: 4.65,
     },
-    passwordInputBox2:{
-        position: "absolute",
-        width: "85%",
-        height: "20%",
-        backgroundColor: "#FFCC56",
-        justifyContent: "center",
-        borderRadius: 16,
-        top: height * 0.17,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        elevation:3,
-        shadowOpacity: 0.27,
-        shadowRadius: 4.65,
-    },
 
-    passwordInput:{
-        position: "absolute",
-        width: "65%",
-        height: "70%",
-        fontSize: 20,
-        fontFamily:"Rakkas",
-        left:"25%",
-    },
-    
-    passwordIcon:{
-        position:"absolute",
-        left: 20,
-        opacity: 0.7,
-    },
-    
-    sendCodeButton2:{
-        position: "absolute",
-        top:"75%",
-        width:"50%",
-        height:"20%",
-        borderRadius:20,
-        alignItems:"center",
-        backgroundColor:"black",
-        justifyContent:"center",
-    },
     
     goBackContainer:{
         position:"absolute",

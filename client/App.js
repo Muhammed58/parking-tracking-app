@@ -11,11 +11,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={ {headerShown: false, gestureEnabled: true} }
+        screenOptions={ {headerShown: false, gestureEnabled: false} }
         initialRouteName={"Home"}>
 
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="MainPage" component={MainPage} />
+        <Stack.Screen name="MainPage" component={MainPage}  />
 
       </Stack.Navigator>
     </NavigationContainer>
