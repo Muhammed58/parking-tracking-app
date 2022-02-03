@@ -1,20 +1,28 @@
 import React ,{ useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faLock, faEnvelope, faCaretLeft, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faEnvelope, faUser, faSave } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
-
+import { useFonts } from 'expo-font'
+import { useNavigation } from '@react-navigation/native'
+import * as SecureStore from 'expo-secure-store';
 
 import { TouchableOpacity, 
     Dimensions, Text, View, StyleSheet,
-    Image, Keyboard, TouchableWithoutFeedback,
-    TextInput, KeyboardAvoidingView, Platform,
-    LayoutAnimation, UIManager, ActivityIndicator
-     } from 'react-native';
+    TextInput, Platform, LayoutAnimation,
+} from 'react-native';
+
+
 
 export const registerUser = (props) => {
-    const [registerBoxPosition, setRegisterBoxPosition] = useState({...props.boxPosition});
+  
+    const navigation = useNavigation()
+    const[loaded] = useFonts({
+        Rakkas: require('../../assets/fonts/Rakkas-Regular.ttf')
+    })
 
-   useEffect(() => {
+    const [registerBoxPosition, setRegisterBoxPosition] = useState({...props.boxPosition});
+    
+    useEffect(() => {
        /* setRegisterBoxPosition(props.boxPosition) */
        toggleRegisterBox()
    }, [props.boxPosition])
@@ -25,26 +33,65 @@ export const registerUser = (props) => {
         setRegisterBoxPosition(registerBoxPosition === 'right'? 'left' : 'right')
     }
 
-    //handle Sign Up 
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [passwordState, setPasswordState] = useState('')
+    const [repeatPassword, setRepeatPassword] = useState('')
+    
+    async function save(key, value) {
+        await SecureStore.setItemAsync(key, value);
+      }
 
-    const handleSignUp = () =>{
-        
-        axios.post('http://localhost:8080/users/', {
-            
-        })
+    //handle Sign Up 
+    const handleSignUp = async () =>{
+        if(!name.trim()){
+            alert("Please Enter Name")
+        }
+        else if(!email.trim()){
+            alert("Please Enter Email")
+        }
+        else if(!passwordState.trim()){
+            alert("Please Enter Password")
+        }
+        else if (repeatPassword === passwordState){
+            await axios.post('http://localhost:8080/users/', {
+                name: name,
+                email: email,
+                password: passwordState
+            })
+            .then(res=>{
+                if(res.status === 201){
+                    alert("User successfully created!")
+                }
+                save("user", res.data.token)
+                navigation.navigate('MainPage')
+               }
+                )
+            .catch(err => {
+                if(err.response.status === 400) {
+                    alert("User already exist")
+                    }
+                })
+
+            setName('');
+            setEmail('');
+            setPasswordState('')
+            setRepeatPassword('')
+        }else{ alert("Password deoesn't match")}
     }
     
     return (
      <View style={[styles.input, registerBoxPosition === 'left'? styles.moveLeft : styles.moveRight]}>
              
          <View style={styles.nameInputBox1}>
-             <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
+             <FontAwesomeIcon icon={ faUser } size ={ 25 } style={ styles.emailIcon }/>
              <TextInput
                  style={styles.emailInput}
-                 placeholder={"NAME"}
+                 placeholder={"Name"}
                  textContentType="emailAddress"
                  autoCapitalize="none"
-                 onChangeText={ value => alert(value)}
+                 value = {name}
+                 onChangeText={ value => setName(value)}
                  />
          </View>
          {/* Email input */}
@@ -52,10 +99,11 @@ export const registerUser = (props) => {
              <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
              <TextInput
                  style={styles.emailInput}
-                 placeholder={"EMAIL"}
+                 placeholder={"Email"}
                  textContentType="emailAddress"
                  autoCapitalize="none"
-                 onChangeText={ value => alert(value)}
+                 value= {email}
+                 onChangeText={ value => setEmail(value)}
                  />
          </View>
 
@@ -65,27 +113,35 @@ export const registerUser = (props) => {
              <TextInput
                  textContentType ="password"
                  secureTextEntry = { true }
-                 style={styles.passwordInput}
-                 onChangeText={value2 => alert(value2)}
-                 placeholder={"PASSWORD"}
+                 style = {styles.passwordInput}
+                 value = {passwordState}
+                 onChangeText={value2 => setPasswordState(value2)}
+                 placeholder={"Password"}
                  />
          </View>
          <View style={styles.repeatPasswordInputBox1}>
              <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
+             { repeatPassword === passwordState ? null : <Text style={styles.passwordMatch}>Password doesn't match</Text> }
              <TextInput
                  textContentType ="password"
                  secureTextEntry = { true }
                  style={styles.passwordInput}
-                 onChangeText={value2 => alert(value2)}
+                 value = {repeatPassword}
+                 onChangeText={value2 => setRepeatPassword(value2)}
                  placeholder={"Repeat Password"}
                  />
          </View>
-         <TouchableOpacity style={styles.signInButton} activeOpacity={.8} onPress={ ()=>{toggleRegisterBox()}} >
+         <TouchableOpacity style={styles.signInButton} activeOpacity={.8} onPress={() => handleSignUp()} >
              <Text style={styles.buttonText}>Sign Up</Text>
          </TouchableOpacity>
              
          <Text style={styles.signUpText}>Already have an account?
-             <Text style={styles.signUpText2} onPress={ ()=>{toggleRegisterBox(); props.loginbox("left")}}> Sign In </Text> 
+             <Text style={styles.signUpText2} onPress={ ()=>{toggleRegisterBox(); 
+                                                            props.loginbox("left");
+                                                            setName('');
+                                                            setEmail('');
+                                                            setPasswordState('')
+                                                            setRepeatPassword('')}}> Sign In </Text> 
          </Text>
      </View>
 
@@ -247,6 +303,15 @@ const styles = StyleSheet.create({
         position:"absolute",
         left: 20,
         opacity: 0.7,
+    },
+
+    passwordMatch:{
+        position:"absolute",
+        top: height * 0.08,
+        fontFamily:"Rakkas",
+        color:"red",
+        left: width * 0.21,
+
     },
 
     signInButton:{

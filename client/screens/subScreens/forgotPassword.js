@@ -12,7 +12,7 @@ import {
     useClearByFocusCell,
   } from 'react-native-confirmation-code-field';
 
-import { TouchableOpacity, 
+import { TouchableOpacity,  
     Dimensions, Text, View, StyleSheet,
     Image, Keyboard, TouchableWithoutFeedback,
     TextInput, KeyboardAvoidingView, Platform,
@@ -30,8 +30,8 @@ import { TouchableOpacity,
       }
      
           //background man and women images path
-    const manImage = require('../assets/images/man.png')
-    const womenImage = require('../assets/images/women.png')
+    const manImage = require('../../assets/images/man.png')
+    const womenImage = require('../../assets/images/women.png')
 
 export const LoginPanel = ({navigation}) =>{
     //Hooks for layout animations of password reset boxes
@@ -69,7 +69,7 @@ export const LoginPanel = ({navigation}) =>{
             })
             token = res.data.token
            
-            save('ahmetToken', token)
+            save('user', token)
 
             setInvalidErr(false)
         })
@@ -162,6 +162,8 @@ return (
                             <Text style={styles.signUpText}>Don't have an account?
                                 <Text style={styles.signUpText2} onPress={()=> {
                                                             toggleLoginBox();
+                                                            setEnterEmail('');
+                                                            setPassword('')
                                                             setregisterBoxPosition( registerBoxPosition === "left" ? "right" : "left")}}> Sign Up </Text> 
                             </Text>
                         </View>

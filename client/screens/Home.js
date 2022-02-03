@@ -2,7 +2,8 @@ import React, { useState, useEffect }  from 'react';
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font'
-import{ LoginPanel } from './forgotPassword.js';
+import{ LoginPanel } from './subScreens/forgotPassword.js';
+import * as SecureStore from 'expo-secure-store';
 import { ImageBackground, ActivityIndicator,
         Dimensions, Text, View, StyleSheet,
          Keyboard, TouchableWithoutFeedback,
@@ -15,7 +16,6 @@ import { ImageBackground, ActivityIndicator,
 export default function Home({navigation}) {
 
     //Fonts define
-
     const[loaded] = useFonts({
         Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
     })
@@ -23,10 +23,21 @@ export default function Home({navigation}) {
     // Main page background image path
     const image = require('../assets/images/backgroundCars.jpg')
     
-   
+    //if user already logged in
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(async() => {
+     
+        let result = await SecureStore.getItemAsync("user");
+        console.log(result)
+        if (result) { setIsLoggedIn(result) }
+    }, []);
+    
 
     //isLoading page
     const [isLoading, setisLoading] = useState(true)
+
+
 
 
     useEffect(() => {
@@ -43,6 +54,11 @@ export default function Home({navigation}) {
 
     if (!loaded) {
         return null;
+    }
+    else if (isLoggedIn){
+        navigation.navigate('MainPage', {
+            token: isLoggedIn,
+        })
     }
     return (
         <>
