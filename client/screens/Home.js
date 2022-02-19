@@ -27,17 +27,13 @@ export default function Home({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(async() => {
-     
         let result = await SecureStore.getItemAsync("user");
-        console.log(result)
         if (result) { setIsLoggedIn(result) }
     }, []);
     
 
     //isLoading page
     const [isLoading, setisLoading] = useState(true)
-
-
 
 
     useEffect(() => {

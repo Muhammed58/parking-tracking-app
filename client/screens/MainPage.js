@@ -5,8 +5,8 @@ import MainPageBackImage from './subScreens/MainPageBackImage.js';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { View, Text, Image,
-        StyleSheet, Dimensions, TouchableOpacity
-                                } from 'react-native';
+        StyleSheet, Dimensions, TouchableOpacity,
+        Pressable,       } from 'react-native';
 
 
 // define images
@@ -20,6 +20,9 @@ export default function MainPage ({navigation}) {
         Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
     })
 
+
+
+
     if (!loaded) {
         return null;
     }
@@ -29,18 +32,48 @@ export default function MainPage ({navigation}) {
             <TouchableOpacity activeOpacity={0.6} style={styles.userIcon}>
                 <FontAwesomeIcon icon={ faUserCircle } size={ 37 } style={styles.userProfile}/>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6}   style={styles.parkingHistoryContainer}>
+            <Pressable activeOpacity={0.6}   style={
+                ({pressed}) =>[
+                    { shadowColor:"black", 
+                    shadowRadius:2,
+                    shadowOpacity: pressed? 0.1: 0.9,
+                    shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
+                    transform:[pressed ? {translateY: 10}:{ translateY:0}]
+                    },
+                styles.parkingHistoryContainer]}>
                 <Image source={parkingHistory} style={styles.parkingHistoryImage}/>
-                <Text style={styles.parkingHistoryText}>Parking History</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6}  style={styles.currentParkingContainer}>
+                <View style={styles.historyTextContainer}>
+                    <Text style={styles.parkingHistoryText}>Parking History</Text>
+                </View>
+            </Pressable>
+            <Pressable activeOpacity={0.6}  style={
+                ({pressed}) =>[
+                    { shadowColor:"black", 
+                    shadowRadius:2,
+                    shadowOpacity: pressed? 0.1: 0.9,
+                    shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
+                    transform:[pressed ? {translateY: 10}:{ translateY:0}]
+                    },styles.currentParkingContainer]}>
                 <Image source={currentParking} style={styles.currentParkingImage}/>
-                <Text style={styles.currentParkingText}>Current Parking</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} style={styles.parkHereContainer}>
+                <View style={styles.currentTextContainer}>
+                    <Text style={styles.currentParkingText}>Current Parking</Text>
+                </View>
+                
+            </Pressable>
+            <Pressable activeOpacity={0.6} style={
+                 ({pressed}) =>[
+                    { shadowColor:"black", 
+                    shadowRadius:2,
+                    shadowOpacity: pressed? 0.1: 0.9,
+                    shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
+                    transform:[pressed ? {translateY: 10}:{ translateY:0}]
+                    },
+                    styles.parkHereContainer]}>
                 <Image source={parkHere} style={styles.parkHereImage}/>
-                <Text style={styles.parkHereText}>Park Here!</Text>
-            </TouchableOpacity>
+                <View style={styles.parkHereTextContainer}>
+                    <Text style={styles.parkHereText}>Park Here!</Text>
+                </View>
+            </Pressable>
         </View>
     )
 }
@@ -66,7 +99,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         top: height * -0.64,
-        left: width * 0.4,
+        left: width * 0.4,  
     },
     userProfile:{
         position:"absolute",
@@ -88,13 +121,17 @@ const styles = StyleSheet.create({
         top: height * 0.01,
         resizeMode: "stretch",
     },
-    parkingHistoryText:{
+    historyTextContainer:{
         position:"absolute",
-        fontFamily:"Rakkas",
-        fontSize: width * 0.06,
-        top: height * 0.11,
+        top: height * 0.12,
         borderWidth:3,
         borderRadius:10,
+        backgroundColor:"#FFCC56",
+        padding:3,
+    },
+    parkingHistoryText:{
+        fontFamily:"Rakkas",
+        fontSize: width * 0.06,
     },
     currentParkingContainer:{
         position:"relative",
@@ -102,24 +139,28 @@ const styles = StyleSheet.create({
         height: height * 0.2,
         alignItems:"center",
         justifyContent:"center",
-        top: height * -0.61,
+        top: height * -0.60,
         left: width * -0.25,
     },
     currentParkingImage:{
         position:"absolute",
-        width: width * 0.45,
+        width: width * 0.55,
         height: height * 0.30,
         top: height * -0.09,
         resizeMode: "stretch",
     },
-    currentParkingText:{
+    currentTextContainer:{
         position:"absolute",
-        fontFamily:"Rakkas",
-        fontSize: width * 0.06,
-        top: height * 0.16,
-
+        top: height * 0.17,
         borderWidth:3,
         borderRadius:10,
+        backgroundColor:"#FFCC56",
+        padding:3,
+        
+    },
+    currentParkingText:{
+        fontSize: width * 0.06,
+        fontFamily:"Rakkas",
     },
     parkHereContainer:{
         position:"relative",
@@ -133,16 +174,22 @@ const styles = StyleSheet.create({
     parkHereImage:{
         position:"absolute",
         width: width * 0.7,
-        height: height * 0.27,
-        top: height * -0.08,
+        height: height * 0.23,
+        top: height * -0.05,
         resizeMode: "stretch",
     },
-    parkHereText:{
+
+    parkHereTextContainer:{
         position:"absolute",
-        fontFamily:"Rakkas",
-        fontSize: width * 0.06,
         top: height * 0.15,
         borderWidth:3,
         borderRadius:10,
+        backgroundColor:"#FFCC56",
+        padding:3,
+    },
+    parkHereText:{
+        fontFamily:"Rakkas",
+        fontSize: width * 0.06,
+        
     },
 })

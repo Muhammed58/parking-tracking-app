@@ -16,11 +16,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.parkingtracking.trackingapplication",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDoADifrINYV5HLFbS6O4K8XmSK4KNRnRs"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF"
+      },
+      "config":{
+        "googleMaps":{
+          "apiKey": "AIzaSyCyInFknQOMoOp_I6xk7fdvA7X2pWs8vuo"
+        }
       }
     }
 
