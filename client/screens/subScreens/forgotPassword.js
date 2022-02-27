@@ -1,9 +1,10 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState }  from 'react';
 import { faLock, faEnvelope, faCaretLeft, faUndo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import axios from 'axios';
 import RegisterUser from './registerUser.js';
 import * as SecureStore from 'expo-secure-store';
+import { LOGIN_KEY, LOGIN_URL } from '@env'
 
 import {
     CodeField,
@@ -56,28 +57,21 @@ export const LoginPanel = ({navigation}) =>{
     const handleSignIn = async() => {
         //start loading spinner
         setLoadingSpinner(true)
-
+        
         //send login info to server
-        await axios.post('http://localhost:8080/users/login', {
+        await axios.post(LOGIN_URL , {
             email: enterEmail,
             password: loginPassword
         })
         .then((res)=>{
-            /* alert("Token: " + res.data.token) */
-            navigation.navigate('MainPage', {
-                token: res.data.token,
-            })
-            token = res.data.token
-           
-            save('user', token)
-
-            setInvalidErr(false)
+                navigation.navigate('MainPage')
+                token = res.data.token
+                save(LOGIN_KEY, token)
+                
         })
-        .catch((err)=>{
-            setInvalidErr(true)
-        }).then(()=>{
-            setLoadingSpinner(false)
-        })
+        .catch(()=>{ setInvalidErr(true) })
+        setLoadingSpinner(false)
+            
     }
 
 

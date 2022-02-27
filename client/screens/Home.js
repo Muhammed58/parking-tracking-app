@@ -3,15 +3,13 @@ import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font'
 import{ LoginPanel } from './subScreens/forgotPassword.js';
-import * as SecureStore from 'expo-secure-store';
+
 import { ImageBackground, ActivityIndicator,
         Dimensions, Text, View, StyleSheet,
          Keyboard, TouchableWithoutFeedback,
          } from 'react-native';
 
          
-
-
 
 export default function Home({navigation}) {
 
@@ -23,18 +21,9 @@ export default function Home({navigation}) {
     // Main page background image path
     const image = require('../assets/images/backgroundCars.jpg')
     
-    //if user already logged in
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(async() => {
-        let result = await SecureStore.getItemAsync("user");
-        if (result) { setIsLoggedIn(result) }
-    }, []);
     
-
     //isLoading page
     const [isLoading, setisLoading] = useState(true)
-
 
     useEffect(() => {
         setTimeout(() => setisLoading(false), 1000);
@@ -47,14 +36,8 @@ export default function Home({navigation}) {
         </TouchableWithoutFeedback>
     );
     
-
     if (!loaded) {
         return null;
-    }
-    else if (isLoggedIn){
-        navigation.navigate('MainPage', {
-            token: isLoggedIn,
-        })
     }
     return (
         <>
@@ -69,7 +52,9 @@ export default function Home({navigation}) {
                                     <ActivityIndicator size="large" color= "#064635"/>
                                 </View>)
         
-        :(<KeyboardDismiss>
+        :(
+
+        <KeyboardDismiss>
 
         <View style={styles.mainContainer}>
             <StatusBar translucent={true} backgroundColor="transparent"/>
@@ -80,8 +65,9 @@ export default function Home({navigation}) {
 
             </ImageBackground>
         </View>
-        </KeyboardDismiss> )
-        }
+        </KeyboardDismiss> 
+        
+        )}
         </>
     )
 }
