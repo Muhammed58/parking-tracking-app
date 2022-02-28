@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
 import 'react-native-gesture-handler';
 import { useFonts } from 'expo-font'
-import MainPageBackImage from './subScreens/MainPageBackImage.js';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import * as SecureStore from 'expo-secure-store';
-import { LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST } from '@env'
-import { View, Text, Image,
-        StyleSheet, Dimensions, TouchableOpacity,
-        Pressable, ActivityIndicator    } from 'react-native';
 import axios from 'axios';
+import Settings from './subScreens/Settings.js'
+import MainPageBackImage from './subScreens/MainPageBackImage.js';
+import { LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST } from '@env'
+import { View, Text, Image, StyleSheet, Dimensions,
+        Pressable, ActivityIndicator } from 'react-native';
 
 
 // define images
@@ -59,12 +57,6 @@ export default function MainPage ({navigation}) {
             setIsLoaded(true)
         }, 500); 
     }, [])
-    
-
-    const handleSignOut = () => {
-        SecureStore.deleteItemAsync(LOGIN_KEY)
-                    .then(navigation.navigate('Home'))
-    }
 
     const handleCurrentParking = () =>{
         navigation.navigate('CurrentParking',{
@@ -99,9 +91,7 @@ export default function MainPage ({navigation}) {
     : (
         <View style={styles.mainContainer}>
             <MainPageBackImage/>
-            <TouchableOpacity activeOpacity={0.6} style={styles.userIcon} onPress={handleSignOut} >
-                <FontAwesomeIcon icon={ faUserCircle } size={ 37 } style={styles.userProfile}/>
-            </TouchableOpacity>
+           
             <Pressable activeOpacity={0.6}   style={
                 ({pressed}) =>[
                     { shadowColor:"black", 
@@ -149,6 +139,8 @@ export default function MainPage ({navigation}) {
                     <Text style={styles.parkHereText}>Park Here!</Text>
                 </View>
             </Pressable>
+            
+            <Settings/>
         </View>
      )}
      </>
@@ -165,24 +157,10 @@ const styles = StyleSheet.create({
         position:"relative",
         width:"100%",
         height:"100%",
-        paddingTop: height * 0.26,
+        paddingTop: height * 0.23,
         alignItems:"center",
         justifyContent:"center",
         backgroundColor:"#FFCC56",
-    },
-
-    userIcon:{
-        position:"relative",
-        width: width * 0.13,
-        height: height * 0.06,
-        alignItems:"center",
-        justifyContent:"center",
-        top: height * -0.64,
-        left: width * 0.4,  
-    },
-
-    userProfile:{
-        position:"absolute",
     },
 
     parkingHistoryContainer:{
@@ -192,8 +170,8 @@ const styles = StyleSheet.create({
         borderTopEndRadius:500,
         alignItems:"center",
         justifyContent:"center",
-        top: height * -0.69,
-        left: width * 0.1,
+        top: height * -0.66,
+        left: width * 0.17,
     },
 
     parkingHistoryImage:{
@@ -223,8 +201,8 @@ const styles = StyleSheet.create({
         height: height * 0.2,
         alignItems:"center",
         justifyContent:"center",
-        top: height * -0.60,
-        left: width * -0.25,
+        top: height * -0.58,
+        left: width * -0.22,
     },
 
     currentParkingImage:{
@@ -236,7 +214,7 @@ const styles = StyleSheet.create({
 
     currentTextContainer:{
         position:"absolute",
-        top: height * 0.17,
+        top: height * 0.18,
         borderWidth:3,
         borderRadius:10,
         backgroundColor:"#FFCC56",
@@ -254,8 +232,8 @@ const styles = StyleSheet.create({
         height: height * 0.2,
         alignItems:"center",
         justifyContent:"center",
-        top: height * -0.50,
-        left: width * 0.03,
+        top: height * -0.47,
+        left: width * 0.05,
     },
 
     parkHereImage:{
@@ -267,7 +245,7 @@ const styles = StyleSheet.create({
 
     parkHereTextContainer:{
         position:"absolute",
-        top: height * 0.15,
+        top: height * 0.16,
         borderWidth:3,
         borderRadius:10,
         backgroundColor:"#FFCC56",

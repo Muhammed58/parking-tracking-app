@@ -10,6 +10,7 @@ import ParkHere from './screens/ParkHere.js'
 import CurrentParking from './screens/CurrentParking.js'
 import auth from './screens/subScreens/auth'
 import ParkingHistory from './screens/ParkingHistory.js';
+import ProfilePage from './screens/ProfilePage.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,7 @@ export default function App() {
         <Stack.Screen name="ParkHere" component={ParkHere} />
         <Stack.Screen name="CurrentParking" component={CurrentParking} />
         <Stack.Screen name="ParkingHistory" component={ParkingHistory} />
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
 
 
       </Stack.Navigator>

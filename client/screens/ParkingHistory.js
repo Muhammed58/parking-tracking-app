@@ -26,14 +26,12 @@ const ParkingHistory = ({route, navigation}) => {
                 {listOfLocations.map((value, index)=>{
                     return(
                         <Marker key={index} 
-                                title={`${moment(value.createdAt).format('MMMM Do   YYYY, h:mm:ss a')}`}
+                                title={`${moment(value.createdAt).format('MMMM Do YYYY, h:mm:ss a')}`}
                                 coordinate={{latitude:value.location[0], 
                                             longitude:value.location[1]}}/>
-
                     )
                 })}
 
-                
             </MapView>
             
             <GoBackButton/>
