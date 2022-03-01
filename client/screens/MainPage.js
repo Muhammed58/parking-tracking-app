@@ -111,6 +111,7 @@ export default function MainPage ({navigation}) {
                 ({pressed}) =>[
                     { shadowColor:"black", 
                     shadowRadius:2,
+                    elevation:1,
                     shadowOpacity: pressed? 0.1: 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10}:{ translateY:0}]
@@ -139,8 +140,8 @@ export default function MainPage ({navigation}) {
                     <Text style={styles.parkHereText}>Park Here!</Text>
                 </View>
             </Pressable>
-            
             <Settings/>
+            
         </View>
      )}
      </>
@@ -170,6 +171,7 @@ const styles = StyleSheet.create({
         borderTopEndRadius:500,
         alignItems:"center",
         justifyContent:"center",
+        elevation:1,
         top: height * -0.66,
         left: width * 0.17,
     },
@@ -201,6 +203,7 @@ const styles = StyleSheet.create({
         height: height * 0.2,
         alignItems:"center",
         justifyContent:"center",
+        elevation:1,
         top: height * -0.58,
         left: width * -0.22,
     },
@@ -229,6 +232,7 @@ const styles = StyleSheet.create({
     parkHereContainer:{
         position:"relative",
         width: width * 0.6,
+        elevation:1,
         height: height * 0.2,
         alignItems:"center",
         justifyContent:"center",
