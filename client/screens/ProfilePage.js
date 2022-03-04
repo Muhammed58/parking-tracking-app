@@ -3,23 +3,16 @@ import GoBackButton from './subScreens/GoBackButton'
 import {View, Text, Dimensions, StyleSheet, TextInput, Pressable, Image} from 'react-native'
 
 
-const data =[
-    {
-        name:"Muhammet ARSLANTAS",
-        email:"muhammedarslantas58@gmail.com",
-        gender:"Male",
-        country:"Turkey"
-    }
-]
 
-const labels =["Name", "Email", "Gender", "Country"]
+const labels =["name", "email", "gender", "country"]
 const inputBoxSizes =[ 0.45, 0.57, 0.69, 0.81  ]
 const labelSizes =[ 0.4, 0.52, 0.64, 0.76]
 
-const ProfilePage = () => {
+const ProfilePage = ({route, navigation}) => {
 
     const vectorBackground = require('../assets/images/vector.png')
     const userCircleIcon = require('../assets/images/user.png')
+
   return (
       <View style={styles.container}>
           
@@ -28,7 +21,7 @@ const ProfilePage = () => {
                 source={vectorBackground}/>
 
         <View style={styles.userNameContainer}>
-            <Text style={styles.userNameText}>{data[0].name}</Text>
+            <Text style={styles.userNameText}>{route.params.profile.name}</Text>
         </View>
 
         <View style={styles.userCircleIconContainer}>
@@ -38,10 +31,10 @@ const ProfilePage = () => {
             return(
                 <React.Fragment key={index}>
                     <View style={[styles.inputLabels, { top: height * labelSizes[index]}]}>
-                        <Text style={styles.inputLabelText}>{value}</Text>
+                        <Text style={styles.inputLabelText}>{value[0].toUpperCase() + value.substring(1)}</Text>
                     </View>
                     <TextInput autoCapitalize='words' editable={false}
-                           style={[styles.inputBoxes,{ top: height * inputBoxSizes[index]}]}>{Object.values(data[0])[index]}</TextInput>
+                           style={[styles.inputBoxes,{ top: height * inputBoxSizes[index]}]}>{Object.values(route.params.profile)[index+1]}</TextInput>
                 </React.Fragment>
             )
         })}

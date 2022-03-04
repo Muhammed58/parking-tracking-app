@@ -64,9 +64,9 @@ export const LoginPanel = ({navigation}) =>{
             password: loginPassword
         })
         .then((res)=>{
-                navigation.navigate('MainPage')
-                token = res.data.token
-                save(LOGIN_KEY, token)
+            token = res.data.token
+            save(LOGIN_KEY, token)
+            navigation.navigate('MainPage')
                 
         })
         .catch(()=>{ setInvalidErr(true) })

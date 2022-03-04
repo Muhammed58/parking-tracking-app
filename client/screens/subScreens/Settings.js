@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {FAB, Portal, Provider} from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';
-import { LOGIN_KEY } from '@env'
+import axios from 'axios'
+import { LOGIN_KEY, GET_PROFILE } from '@env'
 
 const Settings = () => {
 
@@ -14,8 +15,22 @@ const Settings = () => {
 
     const navigation = useNavigation()
 
+    
+    
+    //get profile information
+    const [profile, setProfile] = useState({})
+    useEffect(async() => {
+        let token = await SecureStore.getItemAsync(LOGIN_KEY);
+        await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${token}`} })
+        .then((res)=>{
+            setProfile(res.data)
+        })
+        .catch(err => console.log(err))
+    }, [])
+    
+    
     const handleProfilePage = () => {
-        navigation.navigate('ProfilePage')
+        navigation.navigate('ProfilePage', {profile})
     }
     
     const handleLogOut = () =>{
@@ -29,6 +44,7 @@ const Settings = () => {
             <Portal>
                 <FAB.Group
                 open={open}
+                style={{fontFamily:"Rakkas",}}
                 fabStyle={{backgroundColor:'black', borderColor:'lightgray', borderWidth:3}}
                 color='#FFCC56'
                 icon={open ? 'close' : 'account'}
@@ -36,6 +52,7 @@ const Settings = () => {
                     {
                     icon: 'account',
                     label: 'Profile',
+                    
                     labelStyle:{borderColor:"black", borderWidth:3},
                     color:"black",
                     onPress: () => handleProfilePage(),
@@ -52,7 +69,6 @@ const Settings = () => {
                 onStateChange={onStateChange}
                 onPress={() => {
                     if (open) {
-                        console.log("helloo")
                     }
                 }}
                 />

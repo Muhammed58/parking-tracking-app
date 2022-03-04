@@ -15,36 +15,11 @@ export default function MainPageBackImage() {
 
   
   const navigation = useNavigation()
-  
-  async function getValueFor(key) {
-    let result = await SecureStore.deleteItemAsync(key).then(
-      navigation.navigate('Home')
-    );
-    return result;
-}
 
   return (
   <View style={styles.mainContainer}>
-     {/*  <Text>
-        TEst yazisisisidaslmdnalsjk
-        lasmdnalk
-      </Text>
-      <TouchableOpacity style={{
-                width: '60%',
-                height:50,
-                justifyContent:"center",
-                alignItems:"center",
-                top:40,
-                backgroundColor:"tomato"
-            }}
-            onPress={()=> getValueFor("user") }>
-                <Text>Logout</Text>
-            </TouchableOpacity> */}
-
-
-
-            <Image source={image} style={styles.backgroundImage}/>
-            <Image source={image} style={styles.backgroundImage2}/>
+        <Image source={image} style={styles.backgroundImage}/>
+        <Image source={image} style={styles.backgroundImage2}/>
   </View>
 
 )}

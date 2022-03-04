@@ -21,10 +21,6 @@ export default function ParkHere({route,navigation}){
         Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
     })
 
-    /* GoBack onPress Handler */
-    const goBackHandler = () =>{
-        navigation.navigate('MainPage')
-    }
     
     /* Start Apple Navigation onPress Handler */
     const openAppleMapHandler = () =>{
@@ -37,6 +33,7 @@ export default function ParkHere({route,navigation}){
     }
 
     const [chooseMap, setChooseMap] = useState(false)
+
 
      //If font loaded then render component
      if (!loaded) {

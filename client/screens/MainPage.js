@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font'
 import axios from 'axios';
 import Settings from './subScreens/Settings.js'
 import MainPageBackImage from './subScreens/MainPageBackImage.js';
-import { LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST } from '@env'
+import { LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST, GET_PROFILE } from '@env'
 import { View, Text, Image, StyleSheet, Dimensions,
         Pressable, ActivityIndicator } from 'react-native';
 
@@ -34,11 +34,9 @@ export default function MainPage ({navigation}) {
                 setLastLocation(res.data.location)
             })
             .catch(err=> console.log(err))
-
-        }, [])
+        }, [navigation])
     
-
-         // Set last location data
+    // get list of locations
     const [locationList, setLocationList] = useState({})
     useEffect(async() => {
         let token = await SecureStore.getItemAsync(LOGIN_KEY);
@@ -140,6 +138,7 @@ export default function MainPage ({navigation}) {
                     <Text style={styles.parkHereText}>Park Here!</Text>
                 </View>
             </Pressable>
+
             <Settings/>
             
         </View>

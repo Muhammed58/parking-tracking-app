@@ -49,7 +49,7 @@ export default function ParkHere({navigation}){
         await axios.post( POST_LOCATION, {
             locationInfo: [location.latitude, location.longitude]
         },{ headers: {"Authorization" : `Bearer ${token}`} })
-        .then(() => {
+        .then((res) => {
             setIsParked(true)
             setTimeout(() => navigation.navigate('MainPage'), 1000);
         })
