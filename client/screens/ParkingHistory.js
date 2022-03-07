@@ -11,7 +11,7 @@ const ParkingHistory = ({route, navigation}) => {
   const [listOfLocations, setListOfLocations] = useState([])
   useEffect(() => {
     setListOfLocations(route.params.locationList)
-  }, [])
+  }, [route.params])
   
   return (
     <View style={styles.container}>

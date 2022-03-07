@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import { faLock, faEnvelope, faCaretLeft, faUndo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import axios from 'axios';
@@ -40,7 +40,7 @@ export const LoginPanel = ({navigation}) =>{
     const [sendCodePosition, setSendCodePosition] = useState("right");
     const [enterCodePosition, setEnterCodePosition] = useState("right");
     const [registerBoxPosition, setregisterBoxPosition] = useState("right")
-    
+
     //login info
     const [enterEmail, setEnterEmail] = useState("")
     const [loginPassword, setPassword] = useState("")

@@ -51,7 +51,10 @@ export default function ParkHere({navigation}){
         },{ headers: {"Authorization" : `Bearer ${token}`} })
         .then((res) => {
             setIsParked(true)
-            setTimeout(() => navigation.navigate('MainPage'), 1000);
+            setTimeout(() => navigation.navigate('MainPage',{
+                latitude: location.latitude,
+                longitude: location.longitude
+            }), 1000);
         })
         .catch(err=> console.log(err))
     }

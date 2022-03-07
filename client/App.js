@@ -20,7 +20,7 @@ export default function App() {
     Rakkas: require('./assets/fonts/Rakkas-Regular.ttf')
   })
 
- let authorization = auth();
+   let authorization = auth();
   
   console.log("this",authorization)
 

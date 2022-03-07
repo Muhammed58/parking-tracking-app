@@ -16,7 +16,7 @@ const currentParking = require('../assets/images/currentParking.png')
 const parkHere = require('../assets/images/parkHereIcon.png')
 
 
-export default function MainPage ({navigation}) {
+export default function MainPage ({route, navigation}) {
      //Fonts define
     const[loaded] = useFonts({
         Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
@@ -34,8 +34,7 @@ export default function MainPage ({navigation}) {
                 setLastLocation(res.data.location)
             })
             .catch(err=> console.log(err))
-        }, [navigation])
-    
+        }, [route.params])
     // get list of locations
     const [locationList, setLocationList] = useState({})
     useEffect(async() => {
@@ -46,7 +45,7 @@ export default function MainPage ({navigation}) {
             })
             .catch(err=> console.log(err))
 
-        }, [])
+        }, [route.params])
     
     const [isLoaded, setIsLoaded] = useState(false)
 

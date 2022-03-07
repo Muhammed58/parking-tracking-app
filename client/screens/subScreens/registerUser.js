@@ -1,11 +1,11 @@
 import React ,{ useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faLock, faEnvelope, faUser, faSave } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faEnvelope, faUser, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';
-
+import { REGISTER_USER } from "@env"
 import { TouchableOpacity, 
     Dimensions, Text, View, StyleSheet,
     TextInput, Platform, LayoutAnimation,
@@ -37,6 +37,8 @@ export const registerUser = (props) => {
     const [email, setEmail] = useState('')
     const [passwordState, setPasswordState] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
+
+    const [userCreated, setUserCreated] = useState(false)
     
     async function save(key, value) {
         await SecureStore.setItemAsync(key, value);
@@ -54,17 +56,26 @@ export const registerUser = (props) => {
             alert("Please Enter Password")
         }
         else if (repeatPassword === passwordState){
-            await axios.post('http://localhost:8080/users/', {
+            await axios.post(REGISTER_USER, {
                 name: name,
                 email: email,
                 password: passwordState
             })
             .then(res=>{
                 if(res.status === 201){
-                    alert("User successfully created!")
+                    setUserCreated(true)
+                    setTimeout(() => { navigation.navigate('MainPage'), 
+                                setUserCreated(false) }, 
+                                
+                                1000); 
                 }
                 save("user", res.data.token)
-                navigation.navigate('MainPage')
+                toggleRegisterBox(); 
+                props.loginbox("left");
+                setName('');
+                setEmail('');
+                setPasswordState('')
+                setRepeatPassword('')
                }
                 )
             .catch(err => {
@@ -73,16 +84,12 @@ export const registerUser = (props) => {
                     }
                 })
 
-            setName('');
-            setEmail('');
-            setPasswordState('')
-            setRepeatPassword('')
         }else{ alert("Password deoesn't match")}
     }
     
     return (
      <View style={[styles.input, registerBoxPosition === 'left'? styles.moveLeft : styles.moveRight]}>
-             
+    
          <View style={styles.nameInputBox1}>
              <FontAwesomeIcon icon={ faUser } size ={ 25 } style={ styles.emailIcon }/>
              <TextInput
@@ -143,6 +150,28 @@ export const registerUser = (props) => {
                                                             setPasswordState('')
                                                             setRepeatPassword('')}}> Sign In </Text> 
          </Text>
+
+         <View style={{
+                position:"absolute",
+                display:userCreated? "flex":"none",
+                width: width * 0.65,
+                height: height * 0.13,
+                backgroundColor:"#8BDB81",
+                justifyContent:"center",
+                alignItems:"center",
+                borderRadius:30,
+                shadowColor:"black", 
+                shadowRadius:2,
+                shadowOpacity: 0.9,
+                shadowOffset:{width:0, height:3},
+            }}>
+                <Text style={{
+                    fontFamily:"Rakkas",
+                    fontSize: width * 0.06,
+                }}>Succesfully Parked!
+                </Text>
+                <FontAwesomeIcon icon={faCheckCircle} size={width * 0.1}/>
+            </View>
      </View>
 
     )
