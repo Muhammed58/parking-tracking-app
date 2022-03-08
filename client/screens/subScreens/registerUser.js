@@ -37,8 +37,8 @@ export const registerUser = (props) => {
     const [email, setEmail] = useState('')
     const [passwordState, setPasswordState] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
-
-    const [userCreated, setUserCreated] = useState(false)
+ 
+    const [userCreated, setUserCreated] = useState(false) 
     
     async function save(key, value) {
         await SecureStore.setItemAsync(key, value);
@@ -65,17 +65,17 @@ export const registerUser = (props) => {
                 if(res.status === 201){
                     setUserCreated(true)
                     setTimeout(() => { navigation.navigate('MainPage'), 
-                                setUserCreated(false) }, 
-                                
+                                setUserCreated(false) 
+                                save("user", res.data.token)
+                                toggleRegisterBox(); 
+                                props.loginbox("left");
+                                setName('');
+                                setEmail('');
+                                setPasswordState('')
+                                setRepeatPassword('')
+                            }, 
                                 1000); 
                 }
-                save("user", res.data.token)
-                toggleRegisterBox(); 
-                props.loginbox("left");
-                setName('');
-                setEmail('');
-                setPasswordState('')
-                setRepeatPassword('')
                }
                 )
             .catch(err => {
@@ -151,9 +151,9 @@ export const registerUser = (props) => {
                                                             setRepeatPassword('')}}> Sign In </Text> 
          </Text>
 
-         <View style={{
+         { userCreated && <View style={{
                 position:"absolute",
-                display:userCreated? "flex":"none",
+                elevation: 10, 
                 width: width * 0.65,
                 height: height * 0.13,
                 backgroundColor:"#8BDB81",
@@ -161,7 +161,7 @@ export const registerUser = (props) => {
                 alignItems:"center",
                 borderRadius:30,
                 shadowColor:"black", 
-                shadowRadius:2,
+                shadowRadius:2, 
                 shadowOpacity: 0.9,
                 shadowOffset:{width:0, height:3},
             }}>
@@ -171,7 +171,7 @@ export const registerUser = (props) => {
                 }}>Succesfully Parked!
                 </Text>
                 <FontAwesomeIcon icon={faCheckCircle} size={width * 0.1}/>
-            </View>
+            </View>}
      </View>
 
     )

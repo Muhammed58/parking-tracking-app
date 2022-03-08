@@ -45,7 +45,7 @@ const Settings = () => {
                 <FAB.Group
                 open={open}
                 style={{fontFamily:"Rakkas",}}
-                fabStyle={{backgroundColor:'black', borderColor:'lightgray', borderWidth:3}}
+                fabStyle={{backgroundColor:'black', elevation:10, zIndex:20, borderColor:'lightgray', borderWidth:3}}
                 color='#FFCC56'
                 icon={open ? 'close' : 'account'}
                 actions={[

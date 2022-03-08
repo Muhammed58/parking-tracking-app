@@ -67,7 +67,8 @@ export default function ParkHere({route,navigation}){
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10} : { translateY:0}]
                     },
-                [styles.openMapContainer,  {display: chooseMap ? "none" : "flex"}]]}
+                [styles.openMapContainer,  {display: chooseMap ? "none" : "flex",
+                                                elevation: chooseMap ? -1 : 1}]]}
                 onPress={()=>setChooseMap(true)}
                 >
                     <Text style={styles.openMapContainerText}>Start Navigation</Text>
@@ -82,7 +83,8 @@ export default function ParkHere({route,navigation}){
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10} : { translateY:0}]
                     },
-                [styles.openAppleMapContainer, {display: !chooseMap? "none" : "flex"}]]}
+                [styles.openAppleMapContainer, {display: !chooseMap? "none" : "flex", 
+                                                elevation: !chooseMap ? -1 : 1}]]}
                 onPress={openAppleMapHandler}
                 >
                     <Text style={styles.openAppleMapContainerText}>Apple Map?</Text>
@@ -97,7 +99,8 @@ export default function ParkHere({route,navigation}){
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10} : { translateY:0}]
                     },
-                [styles.openGoogleMapContainer,  {display: !chooseMap? "none" : "flex"}]]}
+                [styles.openGoogleMapContainer,  {display: !chooseMap? "none" : "flex", 
+                                                    elevation: !chooseMap ? -1 : 1}]]}
                 onPress={openGoogleMapHandler}
                 >
                     <Text style={styles.openGoogleMapContainerText}>Google Map?</Text>
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        position:"relative"
+        position:"relative",
     },
 
     map:{
@@ -127,7 +130,6 @@ const styles = StyleSheet.create({
     },
     
     openMapContainer:{
-      /*   display:"none", */
         position:"absolute",
         top: height *0.8,
         left: width * 0.25,

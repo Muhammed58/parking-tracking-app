@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     mainContainer:{
         width:"100%",
         height:"100%",
+        elevation:-3,
     },
     backgroundImage:{
         width: width * 1.6,

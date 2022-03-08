@@ -15,11 +15,12 @@ const GoBackButton = () => {
   return (
         <Pressable style={
                  ({pressed}) =>[
-                    { shadowColor:"black", 
+                    { shadowColor:"black",
                     shadowRadius:2,
                     shadowOpacity: pressed ? 0.1: 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
-                    transform:[pressed ? {translateY: 10} : { translateY:0}]
+                    transform:[pressed ? {translateY: 10} : { translateY:0}],
+                    elevation:4, 
                     },
                 styles.goBackContainer]}
                 onPress={goBackHandler}

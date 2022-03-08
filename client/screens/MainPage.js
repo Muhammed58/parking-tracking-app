@@ -88,14 +88,14 @@ export default function MainPage ({route, navigation}) {
     : (
         <View style={styles.mainContainer}>
             <MainPageBackImage/>
-           
+          
             <Pressable activeOpacity={0.6}   style={
                 ({pressed}) =>[
                     { shadowColor:"black", 
                     shadowRadius:2,
-                    shadowOpacity: pressed? 0.1: 0.9,
+                    shadowOpacity: pressed ? 0.1 : 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
-                    transform:[pressed ? {translateY: 10}:{ translateY:0}]
+                    transform:[pressed ? {translateY: 10}:{ translateY:0}],
                     },
                 styles.parkingHistoryContainer]}
                 onPress={handleParkingHistory}>
@@ -108,7 +108,6 @@ export default function MainPage ({route, navigation}) {
                 ({pressed}) =>[
                     { shadowColor:"black", 
                     shadowRadius:2,
-                    elevation:1,
                     shadowOpacity: pressed? 0.1: 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10}:{ translateY:0}]
@@ -121,6 +120,7 @@ export default function MainPage ({route, navigation}) {
                 </View>
                 
             </Pressable>
+       
             <Pressable activeOpacity={0.6} onPress={()=>{
                 navigation.navigate('ParkHere')
             }} style={
@@ -139,7 +139,6 @@ export default function MainPage ({route, navigation}) {
             </Pressable>
 
             <Settings/>
-            
         </View>
      )}
      </>
@@ -168,8 +167,8 @@ const styles = StyleSheet.create({
         height: height * 0.15,
         borderTopEndRadius:500,
         alignItems:"center",
+        borderWidth:0,
         justifyContent:"center",
-        elevation:1,
         top: height * -0.66,
         left: width * 0.17,
     },

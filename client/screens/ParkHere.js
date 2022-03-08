@@ -34,11 +34,11 @@ export default function ParkHere({navigation}){
         }
         let location = await Location.getCurrentPositionAsync({
             maximumAge: 60000, // only for Android
-            accuracy: Platform.OS === "android" ? Location.Accuracy.Low : Location.Accuracy.Lowest,
+            accuracy: Platform.OS === "android" ? Location.Accuracy.High : Location.Accuracy.Lowest,
         });
         setLocation(location.coords);
-      })();
-    }, []);
+    })();
+}, []);
 
 /* If parked succesfully */
     const [isParked, setIsParked] = useState(false)
