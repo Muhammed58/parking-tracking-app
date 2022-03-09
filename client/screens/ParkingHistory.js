@@ -59,7 +59,7 @@ const ParkingHistory = ({route, navigation}) => {
                  ({pressed}) =>[
                     { shadowColor:"black", 
                     shadowRadius:2,
-                    shadowOpacity: pressed ? 0.1: 0.9,
+                    shadowOpacity: pressed ? 0.1 : 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10} : { translateY:0}]
                     },
