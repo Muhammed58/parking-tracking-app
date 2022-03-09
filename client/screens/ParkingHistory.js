@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import GoBackButton from './subScreens/GoBackButton';
+import axios from 'axios'
+import {LOGIN_KEY, DELETE_LOCATION } from "@env"
+import * as SecureStore from 'expo-secure-store';
 import moment from 'moment'
 
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
@@ -11,6 +14,13 @@ const ParkingHistory = ({route, navigation}) => {
     const [deleteLocation, setDeleteLocation] = useState('')
     const [wantDelete, setWantDelete] = useState(false)
     const [displayOptions, setDisplayOptions] = useState(false)
+
+    const handleDeleteLocation = async() =>{
+        let token = await SecureStore.getItemAsync(LOGIN_KEY);
+        await axios.delete(DELETE_LOCATION + deleteLocation,{ headers: {"Authorization" : `Bearer ${token}`}})
+        .then((res)=>{console.log(res)})
+        .catch((err)=>{console.log(err)})
+    }
 
   // locations list
   const [listOfLocations, setListOfLocations] = useState([])
@@ -34,7 +44,7 @@ const ParkingHistory = ({route, navigation}) => {
                                 title={`${moment(value.createdAt).format('MMMM Do YYYY, h:mm:ss a')}`}
                                 coordinate={{latitude:value.location[0], 
                                             longitude:value.location[1]}}
-                                onPress={()=> {setDeleteLocation(value._id), setWantDelete(true)}}
+                                onPress={()=> {setDeleteLocation(value._id), setWantDelete(true), setDisplayOptions(false)}}
                             />
                     )
                 })}
@@ -79,7 +89,7 @@ const ParkingHistory = ({route, navigation}) => {
                     transform:[pressed ? {translateY: 10} : { translateY:0}]
                     },
                 [styles.allowDeleteContainer]]}
-                onPress={()=> console.log("Delete")}
+                onPress={handleDeleteLocation}
                 >
                     <Text style={styles.allowDeleteContainerText}>Delete</Text>
                 </Pressable>}

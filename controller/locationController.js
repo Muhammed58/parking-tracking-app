@@ -55,3 +55,21 @@ export const getLastLocation = asyncHandler(async(req, res) =>{
         res.json(error)
     }
 });
+
+
+/**
+ * Delete a location
+ * Access project, admin
+**/
+
+export const deleteLocation = asyncHandler(async (req, res) => {
+    const location = await Location.findById(req.params.id);
+
+    if(location) {
+        await Location.deleteOne({_id:req.params.id});
+        res.json({ message: 'Location deleted successfully' });
+    } else {
+        res.status(404);
+        throw new Error('Location not found');
+    }
+});

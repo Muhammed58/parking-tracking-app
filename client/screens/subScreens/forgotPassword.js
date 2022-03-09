@@ -67,10 +67,10 @@ export const LoginPanel = ({navigation}) =>{
             token = res.data.token
             save(LOGIN_KEY, token)
             navigation.navigate('MainPage')
+            setLoadingSpinner(false)
                 
         })
         .catch(()=>{ setInvalidErr(true) })
-        setLoadingSpinner(false)
             
     }
 
