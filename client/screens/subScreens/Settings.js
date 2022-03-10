@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {FAB, Portal, Provider} from 'react-native-paper'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios'
 import { LOGIN_KEY, GET_PROFILE } from '@env'
@@ -14,9 +14,9 @@ const Settings = () => {
     const { open } = actionButton;
 
     const navigation = useNavigation()
+    const route = useRoute()
 
-    
-    
+
     //get profile information
     const [profile, setProfile] = useState({})
     useEffect(async() => {
@@ -26,7 +26,7 @@ const Settings = () => {
             setProfile(res.data)
         })
         .catch(err => console.log(err))
-    }, [])
+    }, [route])
     
     
     const handleProfilePage = () => {

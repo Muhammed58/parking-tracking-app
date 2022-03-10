@@ -2,9 +2,10 @@ import React, {useState, useEffect} from 'react'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import GoBackButton from './subScreens/GoBackButton';
 import axios from 'axios'
-import {LOGIN_KEY, DELETE_LOCATION } from "@env"
+import {LOGIN_KEY, DELETE_LOCATION, GET_LOCATIONLIST } from "@env"
 import * as SecureStore from 'expo-secure-store';
 import moment from 'moment'
+import { getLocationList } from '../api.js'
 
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
 
@@ -15,19 +16,33 @@ const ParkingHistory = ({route, navigation}) => {
     const [wantDelete, setWantDelete] = useState(false)
     const [displayOptions, setDisplayOptions] = useState(false)
 
+
     const handleDeleteLocation = async() =>{
         let token = await SecureStore.getItemAsync(LOGIN_KEY);
         await axios.delete(DELETE_LOCATION + deleteLocation,{ headers: {"Authorization" : `Bearer ${token}`}})
-        .then((res)=>{console.log(res)})
+        .then((res)=>{console.log(res.status); 
+                        setDisplayOptions(false); 
+                        getUpdatedLocations()})
         .catch((err)=>{console.log(err)})
     }
 
+    // get updated locatio list after delete one
+    const getUpdatedLocations = async() =>{
+        let token = await SecureStore.getItemAsync(LOGIN_KEY);
+        await axios.get(GET_LOCATIONLIST, { headers: {"Authorization" : `Bearer ${token}`} })
+            .then((res) => {
+                setListOfLocations(res.data)
+            })
+            .catch(err=> console.log(err))
+
+    }
   // locations list
   const [listOfLocations, setListOfLocations] = useState([])
   useEffect(() => {
     setListOfLocations(route.params.locationList)
-  }, [route.params])
-  
+  }, [])
+
+
   return (
     <View style={styles.container}>
         <MapView style={styles.map}

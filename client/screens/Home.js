@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font'
 import{ LoginPanel } from './subScreens/forgotPassword.js';
 
+
 import { ImageBackground, ActivityIndicator,
         Dimensions, Text, View, StyleSheet,
          Keyboard, TouchableWithoutFeedback,
@@ -25,9 +26,15 @@ export default function Home({navigation}) {
     //isLoading page
     const [isLoading, setisLoading] = useState(true)
 
+
     useEffect(() => {
-        setTimeout(() => setisLoading(false), 1000);
+      setTimeout(() => {
+          setisLoading(false)
+      }, 500);
     }, [])
+    
+    
+    
 
     // Closes the keyboard when clicking anywhere other than input
     const KeyboardDismiss = ({ children }) => (

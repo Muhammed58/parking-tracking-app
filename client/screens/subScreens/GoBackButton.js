@@ -9,7 +9,7 @@ const GoBackButton = () => {
     const navigation = useNavigation()
      /* GoBack onPress Handler */
      const goBackHandler = () =>{
-        navigation.navigate('MainPage')
+        navigation.navigate('MainPage',{refreshPage:true})
     }
     
   return (
