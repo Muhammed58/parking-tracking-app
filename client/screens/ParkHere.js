@@ -3,10 +3,8 @@ import { useFonts } from 'expo-font'
 import * as Location from 'expo-location';
 import {  faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import axios from 'axios'
-import * as SecureStore from 'expo-secure-store';
-import { POST_LOCATION, LOGIN_KEY } from '@env'
 import GoBackButton from './subScreens/GoBackButton.js'
+import { sendLocation } from '../api.js'
 
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {View, Text, StyleSheet, 
@@ -45,10 +43,7 @@ export default function ParkHere({navigation}){
 
 /* Handle Post Location Info with User ID  */
     const handlePostLocation = async() =>{
-        let token = await SecureStore.getItemAsync(LOGIN_KEY);
-        await axios.post( POST_LOCATION, {
-            locationInfo: [location.latitude, location.longitude]
-        },{ headers: {"Authorization" : `Bearer ${token}`} })
+        sendLocation(location.latitude, location.longitude)
         .then((res) => {
             setIsParked(true)
             setTimeout(() => navigation.navigate('MainPage',{

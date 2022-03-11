@@ -31,7 +31,7 @@ export default function Home({navigation}) {
       setTimeout(() => {
           setisLoading(false)
       }, 500);
-    }, [])
+    }, [navigation])
     
     
     

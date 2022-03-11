@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import * as SecureStore from 'expo-secure-store';
 import 'react-native-gesture-handler';
 import { useFonts } from 'expo-font'
-import axios from 'axios';
 import Settings from './subScreens/Settings.js'
 import MainPageBackImage from './subScreens/MainPageBackImage.js';
-import { LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST, GET_PROFILE } from '@env'
 import { View, Text, Image, StyleSheet, Dimensions,
         Pressable, ActivityIndicator } from 'react-native';
-import {getLastLocation} from '../api.js'
+import {getLastLocation, getLocationList, getProfile} from '../api.js'
 
 // define images
 const parkingHistory = require('../assets/images/parkingHistory.png');
@@ -22,39 +19,33 @@ export default function MainPage ({route, navigation}) {
         Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
     })
 
-    // Set last location data
-    const [lastLocation, setLastLocation] = useState([
-        40.6017004,-73.947738
-    ])
-    
+    // SET LAST LOCATION DATA
+    const [lastLocation, setLastLocation] = useState( [40.6017004,-73.947738] )
     useEffect(async() => {
            await getLastLocation()            
-           .then((res) => setLastLocation(res.data.location))
+            .then((res) => setLastLocation(res.data.location))
             .catch(err=> console.log(err))
         }, [route])
 
-    // get list of locations
+    // GET LIST OF LOCATIONS
     const [locationList, setLocationList] = useState({})
     useEffect(async() => {
-        let token = await SecureStore.getItemAsync(LOGIN_KEY);
-        await axios.get(GET_LOCATIONLIST, { headers: {"Authorization" : `Bearer ${token}`} })
-            .then((res) => {
-                setLocationList(res.data)
-            })
-            .catch(err=> console.log(err))
-
+        await getLocationList()            
+        .then((res) => { setLocationList(res.data) })
+        .catch(err=> console.log(err))
         }, [route])
     
        
-    //get profile information
+    //GET PROFILE INFORMATION
     const [profile, setProfile] = useState({})
-    useEffect(async() => {
-        let token = await SecureStore.getItemAsync(LOGIN_KEY);
-        await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${token}`} })
-        .then((res)=>{
-            setProfile(res.data)
-        })
-        .catch(err => console.log(err))
+    useEffect(() => {
+        getProfileInfo = async() =>{
+            await getProfile()        
+            .then((res)=>{console.log(res)})
+            .catch(err => console.log(err))
+            /* .then((res)=>{setProfile(res.data)}) */
+        }
+        getProfileInfo()
     }, [])
 
     //Loading page

@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import { faLock, faEnvelope, faCaretLeft, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faEnvelope, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import axios from 'axios';
 import RegisterUser from './registerUser.js';
@@ -53,12 +53,12 @@ export const LoginPanel = ({navigation}) =>{
         await SecureStore.setItemAsync(key, value);
       }
 
-    //handle Sign in button 
+    // HANDLE SIGN IN BUTTON
     const handleSignIn = async() => {
-        //start loading spinner
+        //START LOADING SPINNER
         setLoadingSpinner(true)
         
-        //send login info to server
+        //SEND LOGIN INFO TO SERVER
         await axios.post(LOGIN_URL , {
             email: enterEmail,
             password: loginPassword

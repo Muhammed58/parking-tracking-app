@@ -1,46 +1,36 @@
 import React, {useState, useEffect} from 'react'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import GoBackButton from './subScreens/GoBackButton';
-import axios from 'axios'
-import {LOGIN_KEY, DELETE_LOCATION, GET_LOCATIONLIST } from "@env"
-import * as SecureStore from 'expo-secure-store';
 import moment from 'moment'
-import { getLocationList } from '../api.js'
+import { deleteLocationRequest, getLocationList } from '../api.js'
 
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
 
 const ParkingHistory = ({route, navigation}) => {
 
-    //locations to be deleted
+    // LOCATIONS TO BE DELETED
     const [deleteLocation, setDeleteLocation] = useState('')
     const [wantDelete, setWantDelete] = useState(false)
     const [displayOptions, setDisplayOptions] = useState(false)
 
 
     const handleDeleteLocation = async() =>{
-        let token = await SecureStore.getItemAsync(LOGIN_KEY);
-        await axios.delete(DELETE_LOCATION + deleteLocation,{ headers: {"Authorization" : `Bearer ${token}`}})
-        .then((res)=>{console.log(res.status); 
-                        setDisplayOptions(false); 
-                        getUpdatedLocations()})
+        deleteLocationRequest(deleteLocation)        
+        .then(()=>{ setDisplayOptions(false); getUpdatedLocations()})
         .catch((err)=>{console.log(err)})
     }
 
-    // get updated locatio list after delete one
+    // GET UPDATED LOCATION LIST AFTER DELETE ONE
     const getUpdatedLocations = async() =>{
-        let token = await SecureStore.getItemAsync(LOGIN_KEY);
-        await axios.get(GET_LOCATIONLIST, { headers: {"Authorization" : `Bearer ${token}`} })
-            .then((res) => {
-                setListOfLocations(res.data)
-            })
+        getLocationList()
+            .then((res) => { setListOfLocations(res.data) })
             .catch(err=> console.log(err))
-
     }
-  // locations list
-  const [listOfLocations, setListOfLocations] = useState([])
-  useEffect(() => {
-    setListOfLocations(route.params.locationList)
-  }, [])
+    // LOCATION LIST
+    const [listOfLocations, setListOfLocations] = useState([])
+    useEffect(() => {
+        setListOfLocations(route.params.locationList)
+    }, [])
 
 
   return (
