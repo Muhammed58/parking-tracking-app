@@ -1,11 +1,11 @@
 import React ,{ useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faLock, faEnvelope, faUser, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios';
 import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';
-import { REGISTER_USER } from "@env"
+import { postSignUp } from '../../api' 
+
 import { TouchableOpacity, 
     Dimensions, Text, View, StyleSheet,
     TextInput, Platform, LayoutAnimation,
@@ -56,11 +56,8 @@ export const registerUser = (props) => {
             alert("Please Enter Password")
         }
         else if (repeatPassword === passwordState){
-            await axios.post(REGISTER_USER, {
-                name: name,
-                email: email,
-                password: passwordState
-            })
+           
+            postSignUp(name, email,passwordState)
             .then(res=>{
                 if(res.status === 201){
                     setUserCreated(true)

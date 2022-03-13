@@ -5,10 +5,11 @@ import {  faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import GoBackButton from './subScreens/GoBackButton.js'
 import { sendLocation } from '../api.js'
+import SplashScreen from './subScreens/SplashScreen.js'
 
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {View, Text, StyleSheet, 
-        Dimensions, ActivityIndicator, Pressable,
+        Dimensions, Pressable,
         Platform
     
     } from 'react-native'
@@ -60,18 +61,9 @@ export default function ParkHere({navigation}){
     }
     return (
         <>
-        {!location ? ( <View style={{
-            alignItems:"center", 
-            justifyContent:"center",
-            width:"100%",
-            height:"100%",
-            backgroundColor:"#FFCC56"
-            }}>
-        <Text style={{fontSize:25, fontFamily:"Rakkas", bottom:20}}>Loading...</Text>
-        <ActivityIndicator size="large" color= "#064635"/>
-    </View>)
-
-:   (
+        {!location ? ( 
+        <SplashScreen/>
+        ) : (
         <View style={styles.container}>
             <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}

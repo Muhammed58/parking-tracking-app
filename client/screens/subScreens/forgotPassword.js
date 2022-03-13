@@ -1,10 +1,9 @@
 import React, { useState, useEffect }  from 'react';
 import { faLock, faEnvelope, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import axios from 'axios';
 import RegisterUser from './registerUser.js';
-import * as SecureStore from 'expo-secure-store';
-import { LOGIN_KEY, LOGIN_URL } from '@env'
+import { useFonts } from 'expo-font'
+import SplashScreen from './SplashScreen.js';
 
 import {
     CodeField,
@@ -34,6 +33,8 @@ import { TouchableOpacity,
     const manImage = require('../../assets/images/man.png')
     const womenImage = require('../../assets/images/women.png')
 
+export const AuthContext = React.createContext();
+
 export const LoginPanel = ({navigation}) =>{
     //Hooks for layout animations of password reset boxes
     const [loginBoxPosition, setLoginBoxPosition] = useState("left");
@@ -49,28 +50,12 @@ export const LoginPanel = ({navigation}) =>{
     //spinner
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     
-    async function save(key, value) {
-        await SecureStore.setItemAsync(key, value);
-      }
-
     // HANDLE SIGN IN BUTTON
+    const { signIn } = React.useContext(AuthContext);
     const handleSignIn = async() => {
         //START LOADING SPINNER
         setLoadingSpinner(true)
-        
-        //SEND LOGIN INFO TO SERVER
-        await axios.post(LOGIN_URL , {
-            email: enterEmail,
-            password: loginPassword
-        })
-        .then((res)=>{
-            token = res.data.token
-            save(LOGIN_KEY, token)
-            navigation.navigate('MainPage')
-            
-        })
-        .catch(()=>{ setInvalidErr(true) })
-            
+        signIn({ enterEmail, loginPassword })
     }
 
 
@@ -100,6 +85,15 @@ export const LoginPanel = ({navigation}) =>{
         }
         
 
+        //Fonts define
+  const[loaded] = useFonts({
+    Rakkas: require('../../assets/fonts/Rakkas-Regular.ttf')
+  })
+
+  if (!loaded) {
+    // We haven't finished checking for the token yet
+    return <SplashScreen />;
+  }
 return (
     <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() } >
 

@@ -33,8 +33,6 @@ export default function Home({navigation}) {
       }, 500);
     }, [navigation])
     
-    
-    
 
     // Closes the keyboard when clicking anywhere other than input
     const KeyboardDismiss = ({ children }) => (

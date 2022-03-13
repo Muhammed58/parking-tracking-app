@@ -35,7 +35,6 @@ const Settings = () => {
     
     const handleLogOut = () =>{
         SecureStore.deleteItemAsync(LOGIN_KEY)
-                    .then(navigation.navigate('Home'))
     }
 
 

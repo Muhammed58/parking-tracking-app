@@ -1,7 +1,18 @@
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store';
-import {LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST, 
-    GET_PROFILE, POST_LOCATION, DELETE_LOCATION } from '@env'
+import {LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST, REGISTER_USER, 
+    GET_PROFILE, POST_LOCATION, DELETE_LOCATION, LOGIN_URL } from '@env'
+
+// ************* SEND LOGIN INFORMATION TO SERVER *************
+export const postSignIn = async(enterEmail, loginPassword) =>{
+    await axios.post(LOGIN_URL, { email: enterEmail, password: loginPassword })
+}
+
+// ************* SET LAST LOCATION DATA *************
+export const postSignUp = async(name, email, passwordState ) =>{
+    await axios.post(REGISTER_USER, { name: name, email: email, password: passwordState})
+}
+
 
 // ************* SET LAST LOCATION DATA *************
 export const getLastLocation =  async () =>{
