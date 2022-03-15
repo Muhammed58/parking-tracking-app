@@ -2,6 +2,7 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as SecureStore from 'expo-secure-store';
 import Home from './screens/Home.js'
 import MainPage from './screens/MainPage.js'
 import ParkHere from './screens/ParkHere.js'
@@ -11,14 +12,13 @@ import ProfilePage from './screens/ProfilePage.js';
 import { LOGIN_KEY } from '@env'
 import { useFonts } from 'expo-font'
 import { postSignIn } from './api.js'
-import { AuthContext } from './screens/subScreens/forgotPassword.js';
+import { AuthContext, LoginPanel } from './screens/subScreens/forgotPassword.js';
 import SplashScreen from './screens/subScreens/SplashScreen'
 
 const Stack = createNativeStackNavigator();
 
-
 export default function App({ navigation }) {
-
+ 
   //Fonts define
   let [loaded] = useFonts({
     Rakkas: require('./assets/fonts/Rakkas-Regular.ttf')
@@ -34,12 +34,16 @@ export default function App({ navigation }) {
             isLoading: false,
           };
         case 'SIGN_IN':
+          if(action.token){
+            SecureStore.setItemAsync(LOGIN_KEY,action.token)
+          }
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
           };
         case 'SIGN_OUT':
+          SecureStore.deleteItemAsync(LOGIN_KEY)
           return {
             ...prevState,
             isSignout: true,
@@ -61,7 +65,7 @@ export default function App({ navigation }) {
 
       try {
         userToken = await SecureStore.getItemAsync(LOGIN_KEY);
-        console.log(userToken)
+        console.log("userToken", userToken)
       } catch (e) {
         // Restoring token failed
       }
@@ -84,14 +88,15 @@ export default function App({ navigation }) {
         // After getting token, we need to persist the token using `SecureStore`
         // In the example, we'll use a dummy token
          //SEND LOGIN INFO TO SERVER
-      postSignIn()
+        
+      await postSignIn(data.enterEmail, data.loginPassword)
         .then((res)=>{
             token = res.data.token
             SecureStore.setItemAsync(LOGIN_KEY, token);
+            dispatch({ type: 'SIGN_IN', token: token });
         })
-        .catch(()=>{ console.log(err); setInvalidErr(true) })
-
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        .catch((err)=>{ console.log(err);})
+       
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       signUp: async (data) => {
@@ -105,7 +110,7 @@ export default function App({ navigation }) {
     }),
     []
   );
-
+    console.log("this state", state.userToken)
   if (state.isLoading || !loaded) {
     // We haven't finished checking for the token yet
     return <SplashScreen />;
@@ -116,7 +121,7 @@ export default function App({ navigation }) {
       <AuthContext.Provider value={authContext}>
 
       <Stack.Navigator screenOptions={ {headerShown: false, gestureEnabled: false} }>
-          {state.userToken == null ? (
+          {state.userToken == null? (
               <Stack.Screen name="Home" component={Home} />
               ) : (
               <>

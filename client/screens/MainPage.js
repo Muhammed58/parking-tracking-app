@@ -21,32 +21,32 @@ export default function MainPage ({route, navigation}) {
 
     // SET LAST LOCATION DATA
     const [lastLocation, setLastLocation] = useState( [40.6017004,-73.947738] )
-    useEffect(async() => {
+   /*  useEffect(async() => {
            await getLastLocation()            
             .then((res) => setLastLocation(res.data.location))
             .catch(err=> console.log(err))
-        }, [route])
+        }, [route]) */
 
     // GET LIST OF LOCATIONS
     const [locationList, setLocationList] = useState({})
-    useEffect(async() => {
+   /*  useEffect(async() => {
         await getLocationList()            
         .then((res) => { setLocationList(res.data) })
         .catch(err=> console.log(err))
-        }, [route])
+        }, [route]) */
     
        
     //GET PROFILE INFORMATION
     const [profile, setProfile] = useState({})
-    useEffect(() => {
-        getProfileInfo = async() =>{
-            await getProfile()        
-            .then((res)=>{console.log(res)})
-            .catch(err => console.log(err))
-            /* .then((res)=>{setProfile(res.data)}) */
-        }
-        getProfileInfo()
-    }, [])
+    //useEffect(() => {
+    //    getProfileInfo = async() =>{
+    //       await getProfile()        
+    //        .then((res)=>{console.log(res)})
+    //        .catch(err => console.log(err))
+    //        /* .then((res)=>{setProfile(res.data)}) */
+    //    }
+    //    getProfileInfo()
+    // }, [])
 
     //Loading page
     const [isLoaded, setIsLoaded] = useState(false)

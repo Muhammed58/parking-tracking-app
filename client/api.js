@@ -5,12 +5,12 @@ import {LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST, REGISTER_USER,
 
 // ************* SEND LOGIN INFORMATION TO SERVER *************
 export const postSignIn = async(enterEmail, loginPassword) =>{
-    await axios.post(LOGIN_URL, { email: enterEmail, password: loginPassword })
+   return await axios.post(LOGIN_URL, { email: enterEmail, password: loginPassword })
 }
 
 // ************* SET LAST LOCATION DATA *************
 export const postSignUp = async(name, email, passwordState ) =>{
-    await axios.post(REGISTER_USER, { name: name, email: email, password: passwordState})
+    return await axios.post(REGISTER_USER, { name: name, email: email, password: passwordState})
 }
 
 
@@ -29,17 +29,17 @@ export const getLocationList = async()=>{
 // ************* GET PROFILE INFORMATION *************
 export const getProfile = async() =>{
     let token = await SecureStore.getItemAsync(LOGIN_KEY);
-    await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${token}`} })
+    return await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${token}`} })
 }
 
 // ************* SEND PARKING COORDINATES *************
 export const sendLocation = async(latitude,longitude) =>{
     let token = await SecureStore.getItemAsync(LOGIN_KEY);
-    await axios.post( POST_LOCATION, { locationInfo: [latitude, longitude]},{ headers: {"Authorization" : `Bearer ${token}`} })
+    return await axios.post( POST_LOCATION, { locationInfo: [latitude, longitude]},{ headers: {"Authorization" : `Bearer ${token}`} })
 }
 
 // ************* SEND PARKING COORDINATES *************
 export const deleteLocationRequest = async(deleteLocation) =>{
     let token = await SecureStore.getItemAsync(LOGIN_KEY);
-    await axios.delete(DELETE_LOCATION + deleteLocation,{ headers: {"Authorization" : `Bearer ${token}`}})
+    return await axios.delete(DELETE_LOCATION + deleteLocation,{ headers: {"Authorization" : `Bearer ${token}`}})
 }

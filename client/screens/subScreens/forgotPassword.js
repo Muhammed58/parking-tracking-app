@@ -33,7 +33,7 @@ import { TouchableOpacity,
     const manImage = require('../../assets/images/man.png')
     const womenImage = require('../../assets/images/women.png')
 
-export const AuthContext = React.createContext();
+    export const AuthContext = React.createContext();
 
 export const LoginPanel = ({navigation}) =>{
     //Hooks for layout animations of password reset boxes
@@ -52,9 +52,9 @@ export const LoginPanel = ({navigation}) =>{
     
     // HANDLE SIGN IN BUTTON
     const { signIn } = React.useContext(AuthContext);
-    const handleSignIn = async() => {
+    const handleSignIn = () => {
         //START LOADING SPINNER
-        setLoadingSpinner(true)
+       /*  setLoadingSpinner(true) */
         signIn({ enterEmail, loginPassword })
     }
 

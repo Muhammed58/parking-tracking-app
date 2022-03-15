@@ -39,8 +39,8 @@
     "react-native-vector-icons": "^9.0.0",
     "react-native-web": "0.17.1"
   },
+  "private": true,
   "devDependencies": {
-    "@babel/core": "^7.12.9"
-  },
-  "private": true
+    "@babel/core": "^7.17.5"
+  }
 }

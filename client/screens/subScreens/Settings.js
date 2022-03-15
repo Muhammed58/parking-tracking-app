@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios'
 import { LOGIN_KEY, GET_PROFILE } from '@env'
+import { AuthContext } from './forgotPassword';
 
 const Settings = () => {
 
@@ -19,22 +20,23 @@ const Settings = () => {
 
     //get profile information
     const [profile, setProfile] = useState({})
-    useEffect(async() => {
+    /* useEffect(async() => {
         let token = await SecureStore.getItemAsync(LOGIN_KEY);
         await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${token}`} })
         .then((res)=>{
             setProfile(res.data)
         })
         .catch(err => console.log(err))
-    }, [route])
+    }, [route]) */
     
     
     const handleProfilePage = () => {
         navigation.navigate('ProfilePage', {profile})
     }
     
+    const { signOut } = React.useContext(AuthContext);
     const handleLogOut = () =>{
-        SecureStore.deleteItemAsync(LOGIN_KEY)
+        signOut()
     }
 
 
