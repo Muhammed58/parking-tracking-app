@@ -5,6 +5,8 @@ import Settings from './subScreens/Settings.js'
 import MainPageBackImage from './subScreens/MainPageBackImage.js';
 import { View, Text, Image, StyleSheet, Dimensions,
         Pressable, ActivityIndicator } from 'react-native';
+
+import { AuthContext } from './subScreens/forgotPassword.js';
 import {getLastLocation, getLocationList, getProfile} from '../api.js'
 
 // define images
@@ -35,7 +37,8 @@ export default function MainPage ({route, navigation}) {
         .catch(err=> console.log(err))
         }, [route]) */
     
-       
+        const arriveState = React.useContext(AuthContext)
+        console.log(arriveState.state)
     //GET PROFILE INFORMATION
     const [profile, setProfile] = useState({})
     //useEffect(() => {

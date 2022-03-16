@@ -11,8 +11,8 @@ import ParkingHistory from './screens/ParkingHistory.js';
 import ProfilePage from './screens/ProfilePage.js';
 import { LOGIN_KEY } from '@env'
 import { useFonts } from 'expo-font'
-import { postSignIn } from './api.js'
-import { AuthContext, LoginPanel } from './screens/subScreens/forgotPassword.js';
+import { getProfile, postSignIn } from './api.js'
+import { AuthContext } from './screens/subScreens/forgotPassword.js';
 import SplashScreen from './screens/subScreens/SplashScreen'
 
 const Stack = createNativeStackNavigator();
@@ -49,6 +49,13 @@ export default function App({ navigation }) {
             isSignout: true,
             userToken: null,
           };
+        case 'GET_PROFILE':
+          return {
+            ...prevState,
+            isSignout:false,
+            name:action.name,
+            email:action.email,
+          }
       }
     },
     {
@@ -65,18 +72,23 @@ export default function App({ navigation }) {
 
       try {
         userToken = await SecureStore.getItemAsync(LOGIN_KEY);
-        console.log("userToken", userToken)
+        if(userToken !== null){
+          await getProfile(userToken)
+          .then(res=> {
+             dispatch({ type: 'GET_PROFILE', name: res.data.name, email: res.data.email })
+          })
+          .catch(err=> console.log("getUserProfileErr", err))
+        }
       } catch (e) {
         // Restoring token failed
+        console.log("boostrapError", e)
       }
-
       // After restoring token, we may need to validate it in production apps
-
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
       dispatch({ type: 'RESTORE_TOKEN', token: userToken });
     };
-
+    
     bootstrapAsync();
   }, []);
 
@@ -98,6 +110,16 @@ export default function App({ navigation }) {
         .catch((err)=>{ console.log(err);})
        
       },
+      getUserProfile: async () => {
+          userToken = await SecureStore.getItemAsync(LOGIN_KEY);
+          if(userToken !== null){
+            await getProfile(userToken)
+            .then(res=> {
+               dispatch({ type: 'GET_PROFILE', name: res.data.name, email: res.data.email })
+            })
+            .catch(err=> console.log("getUserProfileErr", err))
+          }
+      },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
@@ -110,7 +132,6 @@ export default function App({ navigation }) {
     }),
     []
   );
-    console.log("this state", state.userToken)
   if (state.isLoading || !loaded) {
     // We haven't finished checking for the token yet
     return <SplashScreen />;
@@ -118,7 +139,7 @@ export default function App({ navigation }) {
   
   return (
    <NavigationContainer>
-      <AuthContext.Provider value={authContext}>
+      <AuthContext.Provider value={{authContext, state}}>
 
       <Stack.Navigator screenOptions={ {headerShown: false, gestureEnabled: false} }>
           {state.userToken == null? (

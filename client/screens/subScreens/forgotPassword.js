@@ -5,6 +5,7 @@ import RegisterUser from './registerUser.js';
 import { useFonts } from 'expo-font'
 import SplashScreen from './SplashScreen.js';
 
+
 import {
     CodeField,
     Cursor,
@@ -51,11 +52,10 @@ export const LoginPanel = ({navigation}) =>{
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     
     // HANDLE SIGN IN BUTTON
-    const { signIn } = React.useContext(AuthContext);
-    const handleSignIn = () => {
-        //START LOADING SPINNER
-       /*  setLoadingSpinner(true) */
-        signIn({ enterEmail, loginPassword })
+    const arriveState = React.useContext(AuthContext)
+    const handleSignIn = async() => {
+         arriveState.authContext.signIn({ enterEmail, loginPassword })
+         arriveState.authContext.getUserProfile()
     }
 
 

@@ -34,9 +34,9 @@ const Settings = () => {
         navigation.navigate('ProfilePage', {profile})
     }
     
-    const { signOut } = React.useContext(AuthContext);
+    const arriveState = React.useContext(AuthContext)
     const handleLogOut = () =>{
-        signOut()
+        arriveState.authContext.signOut()
     }
 
 

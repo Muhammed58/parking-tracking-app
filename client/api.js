@@ -27,9 +27,8 @@ export const getLocationList = async()=>{
 }
 
 // ************* GET PROFILE INFORMATION *************
-export const getProfile = async() =>{
-    let token = await SecureStore.getItemAsync(LOGIN_KEY);
-    return await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${token}`} })
+export const getProfile = async(userToken) =>{
+    return await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${userToken}`} })
 }
 
 // ************* SEND PARKING COORDINATES *************
