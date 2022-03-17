@@ -15,7 +15,7 @@ const ProfilePage = ({route, navigation}) => {
     const userCircleIcon = require('../assets/images/user.png')
 
     const arriveState = React.useContext(AuthContext)
-        console.log(arriveState.state)
+        console.log("this this",arriveState.state)
   return (
       <View style={styles.container}>
           

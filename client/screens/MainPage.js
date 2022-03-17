@@ -38,7 +38,6 @@ export default function MainPage ({route, navigation}) {
         }, [route]) */
     
         const arriveState = React.useContext(AuthContext)
-        console.log(arriveState.state)
     //GET PROFILE INFORMATION
     const [profile, setProfile] = useState({})
     //useEffect(() => {
