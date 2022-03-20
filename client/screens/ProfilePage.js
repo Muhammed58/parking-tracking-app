@@ -13,9 +13,7 @@ const ProfilePage = ({route, navigation}) => {
 
     const vectorBackground = require('../assets/images/vector.png')
     const userCircleIcon = require('../assets/images/user.png')
-
-    const arriveState = React.useContext(AuthContext)
-        console.log("this this",arriveState.state)
+        console.log("this is route parms in profile ", route.params.props.profile)
   return (
       <View style={styles.container}>
           
@@ -24,7 +22,7 @@ const ProfilePage = ({route, navigation}) => {
                 source={vectorBackground}/>
 
         <View style={styles.userNameContainer}>
-            <Text style={styles.userNameText}>{arriveState.state.name}</Text>
+            <Text style={styles.userNameText}>{route.params.props.profile.name}</Text>
         </View>
 
         <View style={styles.userCircleIconContainer}>
@@ -37,7 +35,7 @@ const ProfilePage = ({route, navigation}) => {
                         <Text style={styles.inputLabelText}>{value[0].toUpperCase() + value.substring(1)}</Text>
                     </View>
                     <TextInput autoCapitalize='words' editable={false}
-                           style={[styles.inputBoxes,{ top: height * inputBoxSizes[index]}]}>{Object.values(arriveState.state)[index+3]}</TextInput>
+                           style={[styles.inputBoxes,{ top: height * inputBoxSizes[index]}]}>{Object.values(route.params.props.profile)[index+1]}</TextInput>
                 </React.Fragment>
             )
         })}

@@ -40,5 +40,5 @@ export const sendLocation = async(latitude,longitude) =>{
 // ************* SEND PARKING COORDINATES *************
 export const deleteLocationRequest = async(deleteLocation) =>{
     let token = await SecureStore.getItemAsync(LOGIN_KEY);
-    return await axios.delete(DELETE_LOCATION + deleteLocation,{ headers: {"Authorization" : `Bearer ${token}`}})
+    return await axios.delete(DELETE_LOCATION+deleteLocation,{ headers: {"Authorization" : `Bearer ${token}`}})
 }

@@ -8,6 +8,8 @@ import { View, Text, Image, StyleSheet, Dimensions,
 
 import { AuthContext } from './subScreens/forgotPassword.js';
 import {getLastLocation, getLocationList, getProfile} from '../api.js'
+import * as SecureStore from 'expo-secure-store';
+import { LOGIN_KEY } from '@env'
 
 // define images
 const parkingHistory = require('../assets/images/parkingHistory.png');
@@ -16,48 +18,49 @@ const parkHere = require('../assets/images/parkHereIcon.png')
 
 
 export default function MainPage ({route, navigation}) {
-     //Fonts define
-    const[loaded] = useFonts({
-        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
-    })
 
     // SET LAST LOCATION DATA
     const [lastLocation, setLastLocation] = useState( [40.6017004,-73.947738] )
-   /*  useEffect(async() => {
+    useEffect(async() => {
            await getLastLocation()            
             .then((res) => setLastLocation(res.data.location))
             .catch(err=> console.log(err))
-        }, [route]) */
+        }, [route])
 
     // GET LIST OF LOCATIONS
     const [locationList, setLocationList] = useState({})
-   /*  useEffect(async() => {
+    useEffect(async() => {
         await getLocationList()            
         .then((res) => { setLocationList(res.data) })
         .catch(err=> console.log(err))
-        }, [route]) */
-    
-        const arriveState = React.useContext(AuthContext)
+        }, [route])
+
     //GET PROFILE INFORMATION
-    const [profile, setProfile] = useState({})
-    //useEffect(() => {
-    //    getProfileInfo = async() =>{
-    //       await getProfile()        
-    //        .then((res)=>{console.log(res)})
-    //        .catch(err => console.log(err))
-    //        /* .then((res)=>{setProfile(res.data)}) */
-    //    }
-    //    getProfileInfo()
-    // }, [])
+    const [profileInfo, setProfileInfo] = useState({})
+    useEffect(() => {
+        getUserProfile= async () => {
+            userToken = await SecureStore.getItemAsync(LOGIN_KEY);
+            if(userToken !== null){
+              await getProfile(userToken)
+              .then(res=> {
+                setProfileInfo(res.data)
+              })
+              .catch(err=> console.log("getUserProfileErr", err))
+            }
+        },
+        getUserProfile()
+    }, [])
+
 
     //Loading page
-    const [isLoaded, setIsLoaded] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(true)
 
-    useEffect(() => {
+    /* useEffect(() => {
+
         setTimeout(() => {
             setIsLoaded(true)
         }, 500); 
-    }, [])
+    }, []) */
 
     const handleCurrentParking = () =>{
         navigation.navigate('CurrentParking',{
@@ -72,6 +75,13 @@ export default function MainPage ({route, navigation}) {
             locationList: locationList
         })
     }
+
+
+    
+    //Fonts define
+    const[loaded] = useFonts({
+        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
+    })
     
     if (!loaded) {
         return null;
@@ -142,7 +152,7 @@ export default function MainPage ({route, navigation}) {
                 </View>
             </Pressable>
 
-            <Settings profile={profile}/>
+            <Settings profile={profileInfo}/>
         </View>
      )}
      </>

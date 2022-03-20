@@ -6,7 +6,7 @@ import axios from 'axios'
 import { LOGIN_KEY, GET_PROFILE } from '@env'
 import { AuthContext } from './forgotPassword';
 
-const Settings = () => {
+const Settings = (props) => {
 
     const [actionButton, setActionButton] = useState({ open: false });
 
@@ -31,7 +31,7 @@ const Settings = () => {
     
     
     const handleProfilePage = () => {
-        navigation.navigate('ProfilePage', {profile})
+        navigation.navigate('ProfilePage', {props})
     }
     
     const arriveState = React.useContext(AuthContext)

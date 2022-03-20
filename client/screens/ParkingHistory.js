@@ -12,17 +12,17 @@ const ParkingHistory = ({route, navigation}) => {
     const [deleteLocation, setDeleteLocation] = useState('')
     const [wantDelete, setWantDelete] = useState(false)
     const [displayOptions, setDisplayOptions] = useState(false)
-
+    
 
     const handleDeleteLocation = async() =>{
-        deleteLocationRequest(deleteLocation)        
+        await deleteLocationRequest(deleteLocation)        
         .then(()=>{ setDisplayOptions(false); getUpdatedLocations()})
         .catch((err)=>{console.log(err)})
     }
 
     // GET UPDATED LOCATION LIST AFTER DELETE ONE
     const getUpdatedLocations = async() =>{
-        getLocationList()
+         await getLocationList()
             .then((res) => { setListOfLocations(res.data) })
             .catch(err=> console.log(err))
     }

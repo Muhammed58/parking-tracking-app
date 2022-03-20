@@ -11,7 +11,7 @@ import ParkingHistory from './screens/ParkingHistory.js';
 import ProfilePage from './screens/ProfilePage.js';
 import { LOGIN_KEY } from '@env'
 import { useFonts } from 'expo-font'
-import { getProfile, postSignIn } from './api.js'
+import { postSignIn } from './api.js'
 import { AuthContext } from './screens/subScreens/forgotPassword.js';
 import SplashScreen from './screens/subScreens/SplashScreen'
 
@@ -49,13 +49,6 @@ export default function App({ navigation }) {
             isSignout: true,
             userToken: null,
           };
-        case 'GET_PROFILE':
-          return {
-            ...prevState,
-            isSignout:false,
-            name:action.name,
-            email:action.email,
-          }
       }
     },
     {
@@ -72,13 +65,6 @@ export default function App({ navigation }) {
 
       try {
         userToken = await SecureStore.getItemAsync(LOGIN_KEY);
-        if(userToken !== null){
-          await getProfile(userToken)
-          .then(res=> {
-             dispatch({ type: 'GET_PROFILE', name: res.data.name, email: res.data.email })
-          })
-          .catch(err=> console.log("getUserProfileErr", err))
-        }
       } catch (e) {
         // Restoring token failed
         console.log("boostrapError", e)
@@ -88,7 +74,6 @@ export default function App({ navigation }) {
       // screen will be unmounted and thrown away.
       dispatch({ type: 'RESTORE_TOKEN', token: userToken });
     };
-    
     bootstrapAsync();
   }, []);
 
@@ -110,16 +95,7 @@ export default function App({ navigation }) {
         .catch((err)=>{ console.log(err);})
        
       },
-      getUserProfile: async () => {
-          userToken = await SecureStore.getItemAsync(LOGIN_KEY);
-          if(userToken !== null){
-            await getProfile(userToken)
-            .then(res=> {
-               dispatch({ type: 'GET_PROFILE', name: res.data.name, email: res.data.email })
-            })
-            .catch(err=> console.log("getUserProfileErr", err))
-          }
-      },
+    
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
@@ -131,11 +107,13 @@ export default function App({ navigation }) {
       },
     }),
     []
+  
   );
-  if (state.isLoading || !loaded) {
+  console.log(state)
+  if (state.isLoading) {
     // We haven't finished checking for the token yet
     return <SplashScreen />;
-  }
+  } 
   
   return (
    <NavigationContainer>

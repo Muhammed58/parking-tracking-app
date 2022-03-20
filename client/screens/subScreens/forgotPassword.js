@@ -54,8 +54,7 @@ export const LoginPanel = ({navigation}) =>{
     // HANDLE SIGN IN BUTTON
     const arriveState = React.useContext(AuthContext)
     const handleSignIn = async() => {
-         arriveState.authContext.signIn({ enterEmail, loginPassword })
-         arriveState.authContext.getUserProfile()
+        await arriveState.authContext.signIn({ enterEmail, loginPassword });
     }
 
 
