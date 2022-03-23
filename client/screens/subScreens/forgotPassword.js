@@ -52,11 +52,19 @@ export const LoginPanel = ({navigation}) =>{
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     
     // HANDLE SIGN IN BUTTON
-    const arriveState = React.useContext(AuthContext)
+    const arriveState = React.useContext(AuthContext) 
     const handleSignIn = async() => {
-        await arriveState.authContext.signIn({ enterEmail, loginPassword });
+        setLoadingSpinner(true)
+        const checkList =["@",".com"]
+        let email = enterEmail.split(' ').join('')
+        if(email.includes(checkList[0]) && email.includes(checkList[1])){
+            setInvalidErr(false)
+            arriveState.authContext.signIn({ enterEmail, loginPassword })
+        }else{
+            setInvalidErr(true)
+            setLoadingSpinner(false)
+       }
     }
-
 
         //Code  confirmation screen
         const CELL_COUNT = 5;
@@ -83,7 +91,6 @@ export const LoginPanel = ({navigation}) =>{
             setEnterCodePosition(enterCodePosition === 'right' ? 'left' : 'right')
         }
         
-
         //Fonts define
   const[loaded] = useFonts({
     Rakkas: require('../../assets/fonts/Rakkas-Regular.ttf')
@@ -105,11 +112,11 @@ return (
                         <Image style={styles.manImage} source={manImage}/>
           
         {/* Email and password Auth */}
-                        <View style={[loadingSpinner === false ? styles.hiddenLoadingSpinner : styles.loadingSpinner]}>
+                        <View style={[!loadingSpinner ? styles.hiddenLoadingSpinner : styles.loadingSpinner]}>
                             <ActivityIndicator size="large" color= "#064635"/>
                         </View>
                         <View style={[styles.input, loginBoxPosition === 'left'? styles.moveLeft : styles.moveRight]}>
-                            <Text style={[invalidErr === true ? styles.invalidErr: styles.validlogin]}>Invalid Email or Password</Text>
+                            <Text style={[invalidErr === true ? styles.invalidErr : styles.validlogin]}>Invalid Email or Password</Text>
                                 
                             {/* Email input */}
                             <View style={styles.emailInputBox1}>

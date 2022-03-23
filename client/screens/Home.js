@@ -4,11 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font'
 import{ LoginPanel } from './subScreens/forgotPassword.js';
 
-
-import { ImageBackground, ActivityIndicator,
-        Dimensions, Text, View, StyleSheet,
-         Keyboard, TouchableWithoutFeedback,
+import { ImageBackground, Dimensions, View, 
+        StyleSheet,  Keyboard, TouchableWithoutFeedback,
          } from 'react-native';
+import SplashScreen from './subScreens/SplashScreen.js';
 
          
 
@@ -22,7 +21,6 @@ export default function Home({navigation}) {
     // Main page background image path
     const image = require('../assets/images/backgroundCars.jpg')
     
-    
     //isLoading page
     const [isLoading, setisLoading] = useState(true)
 
@@ -32,7 +30,6 @@ export default function Home({navigation}) {
           setisLoading(false)
       }, 500);
     }, [navigation])
-    
 
     // Closes the keyboard when clicking anywhere other than input
     const KeyboardDismiss = ({ children }) => (
@@ -46,18 +43,10 @@ export default function Home({navigation}) {
     }
     return (
         <>
-        {isLoading === true ? ( <View style={{
-                                        alignItems:"center", 
-                                        justifyContent:"center",
-                                        width:"100%",
-                                        height:"100%",
-                                        backgroundColor:"#FFCC56"
-                                        }}>
-                                    <Text style={{fontSize:25, fontFamily:"Rakkas", bottom:20}}>Loading...</Text>
-                                    <ActivityIndicator size="large" color= "#064635"/>
-                                </View>)
+        {isLoading === true ? 
+        ( <SplashScreen/> 
         
-        :(
+        ):(
 
         <KeyboardDismiss>
 

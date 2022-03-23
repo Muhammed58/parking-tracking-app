@@ -77,6 +77,7 @@ export default function App({ navigation }) {
     bootstrapAsync();
   }, []);
 
+ 
   const authContext = React.useMemo(
     () => ({
       signIn: async (data) => {
@@ -85,15 +86,13 @@ export default function App({ navigation }) {
         // After getting token, we need to persist the token using `SecureStore`
         // In the example, we'll use a dummy token
          //SEND LOGIN INFO TO SERVER
-        
-      await postSignIn(data.enterEmail, data.loginPassword)
+       return await postSignIn(data.enterEmail, data.loginPassword)
         .then((res)=>{
             token = res.data.token
             SecureStore.setItemAsync(LOGIN_KEY, token);
             dispatch({ type: 'SIGN_IN', token: token });
         })
-        .catch((err)=>{ console.log(err);})
-       
+        .catch((err)=>{ console.log("sign in error", err);})
       },
     
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
@@ -109,7 +108,6 @@ export default function App({ navigation }) {
     []
   
   );
-  console.log(state)
   if (state.isLoading) {
     // We haven't finished checking for the token yet
     return <SplashScreen />;

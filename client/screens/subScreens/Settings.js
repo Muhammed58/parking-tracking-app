@@ -17,7 +17,6 @@ const Settings = (props) => {
     const navigation = useNavigation()
     const route = useRoute()
 
-
     //get profile information
     const [profile, setProfile] = useState({})
     /* useEffect(async() => {

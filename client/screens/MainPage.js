@@ -21,25 +21,25 @@ export default function MainPage ({route, navigation}) {
 
     // SET LAST LOCATION DATA
     const [lastLocation, setLastLocation] = useState( [40.6017004,-73.947738] )
-    useEffect(async() => {
-           await getLastLocation()            
+    useEffect(() => {
+            getLastLocation()            
             .then((res) => setLastLocation(res.data.location))
             .catch(err=> console.log(err))
-        }, [route])
+        }, [route.params])
 
     // GET LIST OF LOCATIONS
     const [locationList, setLocationList] = useState({})
-    useEffect(async() => {
-        await getLocationList()            
+    useEffect(() => {
+         getLocationList()            
         .then((res) => { setLocationList(res.data) })
         .catch(err=> console.log(err))
-        }, [route])
+        }, [route.params])
 
     //GET PROFILE INFORMATION
     const [profileInfo, setProfileInfo] = useState({})
     useEffect(() => {
         getUserProfile= async () => {
-            userToken = await SecureStore.getItemAsync(LOGIN_KEY);
+            userToken = await SecureStore.getItemAsync(LOGIN_KEY); 
             if(userToken !== null){
               await getProfile(userToken)
               .then(res=> {
@@ -50,8 +50,8 @@ export default function MainPage ({route, navigation}) {
         },
         getUserProfile()
     }, [])
-
-
+    
+ console.log("this route", route)
     //Loading page
     const [isLoaded, setIsLoaded] = useState(true)
 
@@ -75,8 +75,6 @@ export default function MainPage ({route, navigation}) {
             locationList: locationList
         })
     }
-
-
     
     //Fonts define
     const[loaded] = useFonts({

@@ -17,7 +17,6 @@ const ProfilePage = ({route, navigation}) => {
   return (
       <View style={styles.container}>
           
-          
         <Image style={styles.vectorBackground} 
                 source={vectorBackground}/>
 

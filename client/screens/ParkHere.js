@@ -45,7 +45,7 @@ export default function ParkHere({navigation}){
 /* Handle Post Location Info with User ID  */
     const handlePostLocation = async() =>{
         sendLocation(location.latitude, location.longitude)
-        .then((res) => {
+        .then(() => {
             setIsParked(true)
             setTimeout(() => navigation.navigate('MainPage',{
                 latitude: location.latitude,

@@ -7,16 +7,14 @@ const auth = () => {
   //if user already logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   
-
-  const getUser = async () =>{
+  /* const getUser = async () =>{
     const result = await SecureStore.getItemAsync(LOGIN_KEY);
     if(result){ setIsLoggedIn(true) } 
   }
   useEffect(() => {
     getUser()
   }, [])
-  
-  
+   */
   return isLoggedIn;
 }
 

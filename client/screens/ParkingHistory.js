@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import GoBackButton from './subScreens/GoBackButton';
 import moment from 'moment'
-import { deleteLocationRequest, getLocationList } from '../api.js'
+import { deleteLocationRequest, getLocationList, getLastLocation } from '../api.js'
 
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
 
@@ -25,6 +25,7 @@ const ParkingHistory = ({route, navigation}) => {
          await getLocationList()
             .then((res) => { setListOfLocations(res.data) })
             .catch(err=> console.log(err))
+            
     }
     // LOCATION LIST
     const [listOfLocations, setListOfLocations] = useState([])
@@ -32,7 +33,7 @@ const ParkingHistory = ({route, navigation}) => {
         setListOfLocations(route.params.locationList)
     }, [])
 
-
+    console.log(listOfLocations)
   return (
     <View style={styles.container}>
         <MapView style={styles.map}
