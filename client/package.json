@@ -16,6 +16,7 @@
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "axios": "^0.24.0",
+    "expo-font": "^10.0.5",
     "expo-location": "^14.0.1",
     "expo-modules-core": "^0.6.5",
     "expo-secure-store": "^11.1.1",

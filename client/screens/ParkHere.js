@@ -5,6 +5,7 @@ import {  faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import GoBackButton from './subScreens/GoBackButton.js'
 import { sendLocation } from '../api.js'
+import { ErrorPage } from './subScreens/ErrorPage.js';
 import SplashScreen from './subScreens/SplashScreen.js'
 
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
@@ -55,6 +56,10 @@ export default function ParkHere({navigation}){
         .catch(err=> console.log(err))
     }
 
+
+    //HANDLE ERROR MESSAGES
+    const [errorMessage, setErrorMessage] = useState(false)
+
     //If font loaded then render component
     if (!loaded) {
         return null;
@@ -62,9 +67,9 @@ export default function ParkHere({navigation}){
     return (
         <>
         {!location ? ( 
-        <SplashScreen/>
-        ) : (
-        <View style={styles.container}>
+            <SplashScreen/>
+            ) : (
+                <View style={styles.container}>
             <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
@@ -79,15 +84,14 @@ export default function ParkHere({navigation}){
                     coordinate={{latitude:location.latitude, longitude:location.longitude}}
                     onDragEnd={e=> setLocation(e.nativeEvent.coordinate)}
                     draggable
-                />
+                    />
                 
             </MapView>
 
-        {/* Go back to the Main Page */}
-            <GoBackButton/>
+      
 
         { isParked ?(
-  
+            
             <View style={{
                 position:"absolute",
                 width: width * 0.65,
@@ -109,7 +113,7 @@ export default function ParkHere({navigation}){
                 <FontAwesomeIcon icon={faCheckCircle} size={width * 0.1}/>
             </View>
         ) : (
-          <View style={styles.buttonContainer}>
+            <View style={styles.buttonContainer}>
              <Pressable style={
                  ({pressed}) =>[
                      { shadowColor:"black", 
@@ -130,8 +134,9 @@ export default function ParkHere({navigation}){
                </View>
             </View>
         )}
+            { errorMessage && <ErrorPage errorMessage={"error Message"}/> }
        
-        
+            <GoBackButton/>
         </View>
     )}
     </>

@@ -86,7 +86,7 @@ export default function App({ navigation }) {
         // After getting token, we need to persist the token using `SecureStore`
         // In the example, we'll use a dummy token
          //SEND LOGIN INFO TO SERVER
-       return await postSignIn(data.enterEmail, data.loginPassword)
+       return await postSignIn(data.email, data.loginPassword)
         .then((res)=>{
             token = res.data.token
             SecureStore.setItemAsync(LOGIN_KEY, token);

@@ -3,6 +3,7 @@ import 'react-native-gesture-handler';
 import { useFonts } from 'expo-font'
 import Settings from './subScreens/Settings.js'
 import MainPageBackImage from './subScreens/MainPageBackImage.js';
+import { ErrorPage } from './subScreens/ErrorPage.js';
 import { View, Text, Image, StyleSheet, Dimensions,
         Pressable, ActivityIndicator } from 'react-native';
 
@@ -10,6 +11,7 @@ import { AuthContext } from './subScreens/forgotPassword.js';
 import {getLastLocation, getLocationList, getProfile} from '../api.js'
 import * as SecureStore from 'expo-secure-store';
 import { LOGIN_KEY } from '@env'
+import SplashScreen from './subScreens/SplashScreen.js';
 
 // define images
 const parkingHistory = require('../assets/images/parkingHistory.png');
@@ -51,9 +53,8 @@ export default function MainPage ({route, navigation}) {
         getUserProfile()
     }, [])
     
- console.log("this route", route)
     //Loading page
-    const [isLoaded, setIsLoaded] = useState(true)
+    const [isLoaded, setIsLoaded] = useState(false)
 
     /* useEffect(() => {
 
@@ -75,32 +76,28 @@ export default function MainPage ({route, navigation}) {
             locationList: locationList
         })
     }
-    
-    //Fonts define
+
+    //HANDLE ERROR MESSAGES
+    const [errorMessage, setErrorMessage] = useState(false)
+     
+    //FONTS DEFINE
     const[loaded] = useFonts({
         Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
     })
     
     if (!loaded) {
         return null;
-    }
+    } 
+    
     return(
         <>
-        {!isLoaded ? ( <View style={{
-            alignItems:"center", 
-            justifyContent:"center",
-            width:"100%",
-            height:"100%",
-            backgroundColor:"#FFCC56"
-            }}>
-        <Text style={{fontSize:25, fontFamily:"Rakkas", bottom:20}}>Loading...</Text>
-        <ActivityIndicator size="large" color= "#064635"/>
-    </View>)
-
-    : (
+        {isLoaded ? ( <SplashScreen/>
+        
+        ) : (
+        
         <View style={styles.mainContainer}>
             <MainPageBackImage/>
-          
+         
             <Pressable activeOpacity={0.6}   style={
                 ({pressed}) =>[
                     { shadowColor:"black", 
@@ -149,8 +146,9 @@ export default function MainPage ({route, navigation}) {
                     <Text style={styles.parkHereText}>Park Here!</Text>
                 </View>
             </Pressable>
-
             <Settings profile={profileInfo}/>
+
+            { errorMessage && <ErrorPage errorMessage={"error Message"}/>}
         </View>
      )}
      </>

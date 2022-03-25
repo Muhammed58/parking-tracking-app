@@ -59,7 +59,8 @@ export const LoginPanel = ({navigation}) =>{
         let email = enterEmail.split(' ').join('')
         if(email.includes(checkList[0]) && email.includes(checkList[1])){
             setInvalidErr(false)
-            arriveState.authContext.signIn({ enterEmail, loginPassword })
+            setLoadingSpinner(false)
+            arriveState.authContext.signIn({email,loginPassword})
         }else{
             setInvalidErr(true)
             setLoadingSpinner(false)
@@ -144,7 +145,7 @@ return (
                                     />
                             </View>
                                 
-                            <TouchableOpacity style={styles.forgotPassword} onPress={()=> {toggleLoginBox(); toggleSendCodeBox(); setEnterEmail('')}} >
+                            <TouchableOpacity style={styles.forgotPassword} onPress={()=> {toggleLoginBox(); toggleSendCodeBox(); setEnterEmail(''); setPassword('')}} >
                                 <Text style={styles.forgotPasswordFont}>Forgot Password?</Text>
                             </TouchableOpacity>
 

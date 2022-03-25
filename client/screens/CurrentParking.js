@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import openMap from 'react-native-open-maps'
 import GoBackButton from './subScreens/GoBackButton.js'
+import { ErrorPage } from './subScreens/ErrorPage.js';
 
 import {View, Text, StyleSheet, 
     Dimensions, Pressable,
@@ -34,6 +35,9 @@ export default function ParkHere({route,navigation}){
 
     const [chooseMap, setChooseMap] = useState(false)
 
+    //HANDLE ERROR MESSAGES
+    const [errorMessage, setErrorMessage] = useState(false)
+     
 
      //If font loaded then render component
      if (!loaded) {
@@ -54,9 +58,7 @@ export default function ParkHere({route,navigation}){
                 <Marker coordinate={{latitude:route.params.latitude, 
                                     longitude:route.params.longitude}}/>
             </MapView>
-
-            {/* Go back to the Main Page */}
-                <GoBackButton/>
+           
 
             {/* Open navigation */}
             <Pressable style={
@@ -105,6 +107,11 @@ export default function ParkHere({route,navigation}){
                 >
                     <Text style={styles.openGoogleMapContainerText}>Google Map?</Text>
                 </Pressable>
+                
+                { errorMessage && <ErrorPage errorMessage={"error Message"}/>}
+           
+                <GoBackButton/>
+               
     </View>
   )
 }

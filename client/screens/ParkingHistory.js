@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import GoBackButton from './subScreens/GoBackButton';
+import { ErrorPage } from './subScreens/ErrorPage.js';
 import moment from 'moment'
 import { deleteLocationRequest, getLocationList, getLastLocation } from '../api.js'
 
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
+import SplashScreen from './subScreens/SplashScreen';
 
 const ParkingHistory = ({route, navigation}) => {
 
@@ -14,27 +16,44 @@ const ParkingHistory = ({route, navigation}) => {
     const [displayOptions, setDisplayOptions] = useState(false)
     
 
+    //HANDLE ERROR MESSAGES
+    const [errorMessage, setErrorMessage] = useState(false)
+
+    //HANDLE SPLASH SCREEN
+    const [showSplashScreen, setShowSplashScreen] = useState(false)
+
+
     const handleDeleteLocation = async() =>{
         await deleteLocationRequest(deleteLocation)        
-        .then(()=>{ setDisplayOptions(false); getUpdatedLocations()})
+        .then(()=>{ setDisplayOptions(false); getUpdatedLocations();})
         .catch((err)=>{console.log(err)})
     }
+    
 
     // GET UPDATED LOCATION LIST AFTER DELETE ONE
     const getUpdatedLocations = async() =>{
          await getLocationList()
-            .then((res) => { setListOfLocations(res.data) })
+            .then((res) => { setListOfLocations(res.data);})
             .catch(err=> console.log(err))
-            
     }
     // LOCATION LIST
     const [listOfLocations, setListOfLocations] = useState([])
     useEffect(() => {
-        setListOfLocations(route.params.locationList)
+        let routeLocationList = route.params.locationList
+        setListOfLocations(routeLocationList)
+        if(routeLocationList.length === 0){
+            setErrorMessage(true)
+        }
     }, [])
 
-    console.log(listOfLocations)
+    console.log(listOfLocations.length === 0 )
+    
+   
+    console.log("List of location", listOfLocations.length)
+    console.log(" ")
+    console.log("List from route", route.params.locationList.length)
   return (
+      
     <View style={styles.container}>
         <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
@@ -44,6 +63,8 @@ const ParkingHistory = ({route, navigation}) => {
                     latitudeDelta: 0.1922,
                     longitudeDelta: 2.5421}}
                     >
+                        
+                { showSplashScreen && <SplashScreen opacityValue={0.6}/>}
                 {listOfLocations.map((value, index)=>{
                     return(
                         <Marker key={index} 
@@ -54,8 +75,8 @@ const ParkingHistory = ({route, navigation}) => {
                             />
                     )
                 })}
+                
                 </MapView>
-               
           {wantDelete &&  <Pressable style={
                  ({pressed}) =>[
                     { shadowColor:"black", 
@@ -102,8 +123,12 @@ const ParkingHistory = ({route, navigation}) => {
 
         
             
+          
+            { errorMessage && <ErrorPage errorMessage={"error Message"}/>}
+            
             <GoBackButton/>
 
+          
     </View>
   )
 }
