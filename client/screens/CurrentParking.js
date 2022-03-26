@@ -4,7 +4,6 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import openMap from 'react-native-open-maps'
 import GoBackButton from './subScreens/GoBackButton.js'
 import { ErrorPage } from './subScreens/ErrorPage.js';
-import { getLastLocation } from '../api.js'
 
 import {View, Text, StyleSheet, 
     Dimensions, Pressable,
@@ -14,50 +13,41 @@ import {View, Text, StyleSheet,
 
 export default function ParkHere({route,navigation}){
 
-    //Fonts define
-    const[loaded] = useFonts({
-        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
-    })
-
-    
-    /* Start Apple Navigation onPress Handler */
+    // START APPLE NAVIGATION ONPRESS HANDLER
     const openAppleMapHandler = () =>{
         openMap( {query:`${route.params.latitude}, ${route.params.longitude}`, provider:"apple" }, {latitude: route.params.latitude, longitude: route.params.longitude})
     }
 
-    /* Start Google Navigation onPress Handler */
+    // START GOOGLE NAVIGATION ONPRESS HANDLER
     const openGoogleMapHandler = () =>{
         openMap( {query:`${route.params.latitude}, ${route.params.longitude}`, provider:"google" }, {latitude: route.params.latitude, longitude: route.params.longitude})
     }
 
+    // DISPLAY APPLE MAPS OR GOOGLE MAPS OPTIONS
     const [chooseMap, setChooseMap] = useState(false)
 
     //HANDLE ERROR MESSAGES
     const [errorMessage, setErrorMessage] = useState(false)
     const [errorMessageText, setErrorMessageText] = useState('Error message')
 
-    //LAST LOCATION DATA
-    const [lastLocation, setLastLocation] = useState([route.params.latitude,route.params.longitude])
-
-   /*  const getUpdatedLastLocation = () =>{
-         getLastLocation()
-            .then((res)=> { res.data.location !== null && setLastLocation(res.data.location)})
-            .catch(err=> console.log(err))
-    } */
-
+   
+    // NAVIGATE TO MAIN PAGE IF THERE IS NO AVAILABLE CURRENT LOCATION INFO
     useEffect(() => {
-      /*   getUpdatedLastLocation() */
-        console.log("this", lastLocation)
-        console.log("infosss", route.params)
-
         if(route.params.latitude === undefined){
             setErrorMessage(true)
+            setErrorMessageText('Location Not Found!')
             setTimeout(() => navigation.navigate('MainPage',{params:true}), 1000);
         }
     }, [])
 
-     //If font loaded then render component
-     if (!loaded) {
+
+    //FONT DEFINE
+    const[loaded] = useFonts({
+        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
+    })
+
+    //RENDER AFTER FONT LOADED
+    if (!loaded) {
         return null;
     }
   return (
@@ -77,8 +67,6 @@ export default function ParkHere({route,navigation}){
                 }
             </MapView>
            
-
-            {/* Open navigation */}
             <Pressable style={
                  ({pressed}) =>[
                     { shadowColor:"black", 
@@ -94,7 +82,6 @@ export default function ParkHere({route,navigation}){
                     <Text style={styles.openMapContainerText}>Start Navigation</Text>
                 </Pressable>
 
-            {/* Open Apple Map navigation */}
             <Pressable style={
                  ({pressed}) =>[
                     { shadowColor:"black", 
@@ -110,7 +97,7 @@ export default function ParkHere({route,navigation}){
                     <Text style={styles.openAppleMapContainerText}>Apple Map?</Text>
                 </Pressable>
 
-            {/* Open Google Map navigation */}
+          
             <Pressable style={
                  ({pressed}) =>[
                     { shadowColor:"black", 

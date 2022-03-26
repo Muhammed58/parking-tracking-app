@@ -31,7 +31,7 @@ export const ErrorPage = ({errorMessage}) => {
             position:"absolute",
             width: width * 0.8,
             height: height * 0.2,
-            backgroundColor:"#FFCC56",
+            backgroundColor:"tomato",
             alignItems:"center",
             justifyContent:"center",
             borderRadius: 30,

@@ -3,12 +3,13 @@ import NetInfo from '@react-native-community/netinfo';
 
 
 export default getNetworkInfo = () =>{
+
+    let result;
     const unsubscribe = NetInfo.addEventListener(state => {
-        console.log("Connection type", state.type);
-        console.log("Is connected?", state.isConnected);
-      
+        result = state.isInternetReachable
     });
     
     unsubscribe()
     
+    return result
 }

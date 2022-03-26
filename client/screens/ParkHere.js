@@ -79,7 +79,6 @@ export default function ParkHere({navigation}){
                     longitudeDelta: 0.0421,
                 }}>
 
-        {/* Pin your current/selected location */}
                 <Marker
                     coordinate={{latitude:location.latitude, longitude:location.longitude}}
                     onDragEnd={e=> setLocation(e.nativeEvent.coordinate)}

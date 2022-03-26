@@ -57,7 +57,7 @@ export const registerUser = (props) => {
         }
         else if (repeatPassword === passwordState){
            
-            postSignUp(name, email,passwordState)
+            postSignUp(name, email, passwordState)
             .then(res=>{
                 if(res.status === 201){
                     setUserCreated(true)
@@ -98,7 +98,7 @@ export const registerUser = (props) => {
                  onChangeText={ value => setName(value)}
                  />
          </View>
-         {/* Email input */}
+        
          <View style={styles.emailInputBox1}>
              <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
              <TextInput
@@ -111,7 +111,6 @@ export const registerUser = (props) => {
                  />
          </View>
 
-         {/* Password Input */}
          <View style={styles.passwordInputBox1}>
              <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
              <TextInput
@@ -165,7 +164,7 @@ export const registerUser = (props) => {
                 <Text style={{
                     fontFamily:"Rakkas",
                     fontSize: width * 0.06,
-                }}>Succesfully Parked!
+                }}>Succesfully Registered!
                 </Text>
                 <FontAwesomeIcon icon={faCheckCircle} size={width * 0.1}/>
             </View>}
