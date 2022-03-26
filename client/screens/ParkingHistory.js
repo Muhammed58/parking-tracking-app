@@ -3,6 +3,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import GoBackButton from './subScreens/GoBackButton';
 import { ErrorPage } from './subScreens/ErrorPage.js';
 import moment from 'moment'
+import getNetworkInfo from './subScreens/HandleError.js'
 import { deleteLocationRequest, getLocationList, getLastLocation } from '../api.js'
 
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
@@ -16,12 +17,8 @@ const ParkingHistory = ({route, navigation}) => {
     const [displayOptions, setDisplayOptions] = useState(false)
     
 
-    //HANDLE ERROR MESSAGES
-    const [errorMessage, setErrorMessage] = useState(false)
-
     //HANDLE SPLASH SCREEN
     const [showSplashScreen, setShowSplashScreen] = useState(false)
-
 
     const handleDeleteLocation = async() =>{
         await deleteLocationRequest(deleteLocation)        
@@ -29,37 +26,44 @@ const ParkingHistory = ({route, navigation}) => {
         .catch((err)=>{console.log(err)})
     }
     
-
     // GET UPDATED LOCATION LIST AFTER DELETE ONE
     const getUpdatedLocations = async() =>{
          await getLocationList()
             .then((res) => { setListOfLocations(res.data);})
             .catch(err=> console.log(err))
     }
-    // LOCATION LIST
-    const [listOfLocations, setListOfLocations] = useState([])
+
+    //HANDLE ERROR MESSAGES
+    const [errorMessage, setErrorMessage] = useState(false)
+    const [errorMessageText, setErrorMessageText] = useState('Error')
+
     useEffect(() => {
-        let routeLocationList = route.params.locationList
-        setListOfLocations(routeLocationList)
-        if(routeLocationList.length === 0){
-            setErrorMessage(true)
-        }
+        console.log(' ')
+        getNetworkInfo()
+        console.log(' ')
     }, [])
 
-    console.log(listOfLocations.length === 0 )
-    
-   
-    console.log("List of location", listOfLocations.length)
-    console.log(" ")
-    console.log("List from route", route.params.locationList.length)
+    // LOCATION LIST
+    const [listOfLocations, setListOfLocations] = useState(route.params.locationList)
+    useEffect(() => {
+        if(listOfLocations.length === 0){
+            setErrorMessage(true)
+            setErrorMessageText('No Location Found!')
+            setTimeout(() => navigation.navigate('MainPage',{params:true}), 1000);
+        } 
+    }, [listOfLocations])
+
+
+
+
   return (
       
     <View style={styles.container}>
         <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                    latitude: route.params.latitude,
-                    longitude: route.params.longitude,
+                    latitude: route.params.latitude || 37.78825,
+                    longitude: route.params.longitude ||-122.4324,
                     latitudeDelta: 0.1922,
                     longitudeDelta: 2.5421}}
                     >
@@ -124,7 +128,7 @@ const ParkingHistory = ({route, navigation}) => {
         
             
           
-            { errorMessage && <ErrorPage errorMessage={"error Message"}/>}
+            { errorMessage && <ErrorPage errorMessage={errorMessageText}/>}
             
             <GoBackButton/>
 

@@ -22,14 +22,14 @@ const parkHere = require('../assets/images/parkHereIcon.png')
 export default function MainPage ({route, navigation}) {
 
     // SET LAST LOCATION DATA
-    const [lastLocation, setLastLocation] = useState( [40.6017004,-73.947738] )
+    const [lastLocation, setLastLocation] = useState( [] )
     useEffect(() => {
             getLastLocation()            
-            .then((res) => setLastLocation(res.data.location))
-            .catch(err=> console.log(err))
+            .then((res) => {setLastLocation(res.data.location);})
+            .catch(err=> {console.log(err); setLastLocation(err)})
         }, [route.params])
 
-    // GET LIST OF LOCATIONS
+    // GET LIST OF LOCATIONS 
     const [locationList, setLocationList] = useState({})
     useEffect(() => {
          getLocationList()            
@@ -51,17 +51,10 @@ export default function MainPage ({route, navigation}) {
             }
         },
         getUserProfile()
-    }, [])
+    }, [route.params])
     
     //Loading page
     const [isLoaded, setIsLoaded] = useState(false)
-
-    /* useEffect(() => {
-
-        setTimeout(() => {
-            setIsLoaded(true)
-        }, 500); 
-    }, []) */
 
     const handleCurrentParking = () =>{
         navigation.navigate('CurrentParking',{

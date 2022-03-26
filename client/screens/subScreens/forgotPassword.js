@@ -58,8 +58,6 @@ export const LoginPanel = ({navigation}) =>{
         const checkList =["@",".com"]
         let email = enterEmail.split(' ').join('')
         if(email.includes(checkList[0]) && email.includes(checkList[1])){
-            setInvalidErr(false)
-            setLoadingSpinner(false)
             arriveState.authContext.signIn({email,loginPassword})
         }else{
             setInvalidErr(true)

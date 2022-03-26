@@ -28,7 +28,7 @@ export default function Home({navigation}) {
     useEffect(() => {
       setTimeout(() => {
           setisLoading(false)
-      }, 500);
+      }, 1000);
     }, [navigation])
 
     // Closes the keyboard when clicking anywhere other than input
