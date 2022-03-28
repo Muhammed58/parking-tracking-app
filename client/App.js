@@ -9,7 +9,7 @@ import ParkHere from './screens/ParkHere.js'
 import CurrentParking from './screens/CurrentParking.js'
 import ParkingHistory from './screens/ParkingHistory.js';
 import ProfilePage from './screens/ProfilePage.js';
-import { LOGIN_KEY } from '@env'
+import { LOGIN_KEY, USER_NAME, USER_PASSWORD  } from '@env'
 import { useFonts } from 'expo-font'
 import { postSignIn } from './api.js'
 import { AuthContext } from './screens/subScreens/forgotPassword.js';
@@ -44,6 +44,8 @@ export default function App({ navigation }) {
           };
         case 'SIGN_OUT':
           SecureStore.deleteItemAsync(LOGIN_KEY)
+          SecureStore.deleteItemAsync(USER_NAME)
+          SecureStore.deleteItemAsync(USER_PASSWORD)
           return {
             ...prevState,
             isSignout: true,
@@ -62,9 +64,16 @@ export default function App({ navigation }) {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
-
       try {
         userToken = await SecureStore.getItemAsync(LOGIN_KEY);
+
+        // IF USER ALREADY LOGGED IN CREATE NEW TOKEN TO KEEP USER LOGGED IN
+        if(userToken!==null){
+          let email = await SecureStore.getItemAsync(USER_NAME)
+          let loginPassword = await SecureStore.getItemAsync(USER_PASSWORD)
+          authContext.signIn({email,loginPassword})
+        }
+        console.log("userTokennn ", userToken )
       } catch (e) {
         // Restoring token failed
         console.log("boostrapError", e)
@@ -87,12 +96,14 @@ export default function App({ navigation }) {
         // In the example, we'll use a dummy token
          //SEND LOGIN INFO TO SERVER
        return await postSignIn(data.email, data.loginPassword)
-        .then((res)=>{
+        .then(async(res)=>{
             token = res.data.token
-            SecureStore.setItemAsync(LOGIN_KEY, token);
+            await SecureStore.setItemAsync(LOGIN_KEY, token);
+            await SecureStore.setItemAsync(USER_NAME, data.email )
+            await SecureStore.setItemAsync(USER_PASSWORD, data.loginPassword )
             dispatch({ type: 'SIGN_IN', token: token });
         })
-        .catch((err)=>{ console.log("sign in error", err);})
+        .catch((err)=>{ console.log("sign in error", err); return err})
       },
     
       signOut: () => dispatch({ type: 'SIGN_OUT' }),

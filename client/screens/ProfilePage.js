@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import GoBackButton from './subScreens/GoBackButton'
 import {View, Text, Dimensions, StyleSheet, TextInput, Pressable, Image} from 'react-native'
-import { AuthContext } from './subScreens/forgotPassword'
+
 
 
 

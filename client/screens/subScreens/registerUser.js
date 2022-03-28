@@ -1,7 +1,6 @@
 import React ,{ useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faLock, faEnvelope, faUser, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';
 import { postSignUp } from '../../api' 
@@ -16,9 +15,6 @@ import { TouchableOpacity,
 export const registerUser = (props) => {
   
     const navigation = useNavigation()
-    const[loaded] = useFonts({
-        Rakkas: require('../../assets/fonts/Rakkas-Regular.ttf')
-    })
 
     const [registerBoxPosition, setRegisterBoxPosition] = useState({...props.boxPosition});
     
@@ -37,13 +33,31 @@ export const registerUser = (props) => {
     const [email, setEmail] = useState('')
     const [passwordState, setPasswordState] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
- 
+    const [passwordStrength, setPasswordStrength] = useState('#FFCC56')
+
     const [userCreated, setUserCreated] = useState(false) 
     
     async function save(key, value) {
         await SecureStore.setItemAsync(key, value);
       }
 
+    // PASSWORD STRENGTH CHECKER
+    useEffect(() => {
+        let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+        let mediumPassword = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
+      if(passwordState ===''){
+        setPasswordStrength("#FFCC56")
+        } else if(mediumPassword.test(passwordState)){
+            if(strongPassword.test(passwordState)){
+                setPasswordStrength("#B5FE83")
+            }else{
+
+                setPasswordStrength("yellow")
+            }
+        }
+        else{setPasswordStrength("tomato")}
+    }, [passwordState])
+    
     //handle Sign Up 
     const handleSignUp = async () =>{
         if(!name.trim()){
@@ -111,7 +125,9 @@ export const registerUser = (props) => {
                  />
          </View>
 
-         <View style={styles.passwordInputBox1}>
+         <View style={[styles.passwordInputBox1,{ 
+             backgroundColor: passwordStrength
+         }]}>
              <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
              <TextInput
                  textContentType ="password"

@@ -4,7 +4,7 @@ import GoBackButton from './subScreens/GoBackButton';
 import { ErrorPage } from './subScreens/ErrorPage.js';
 import moment from 'moment'
 import getNetworkInfo from './subScreens/HandleNetworkError.js'
-import { deleteLocationRequest, getLocationList } from '../api.js'
+import { deleteLocationRequest, getLastLocation, getLocationList } from '../api.js'
 
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
 
@@ -20,6 +20,7 @@ const ParkingHistory = ({route, navigation}) => {
     
 
     const handleDeleteLocation = async() =>{
+        setCheckLastLocation(checkLastLocation? false : true)
         await deleteLocationRequest(deleteLocation)        
         .then(()=>{ setDisplayOptions(false); 
                     getUpdatedLocations();
@@ -52,6 +53,19 @@ const ParkingHistory = ({route, navigation}) => {
        }
     }, [checkInternetConnection])
 
+    // SET LAST LOCATION DATA
+    const [lastLocation, setLastLocation] = useState([route.params.latitude, route.params.longitude])
+    const [checkLastLocation, setCheckLastLocation] = useState(false)
+    useEffect(() => {
+            getLastLocation()            
+            .then((res) => {setLastLocation(res.data.location);})
+            .catch(err=> {console.log(err);})
+            console.log("it works")
+            console.log("last location ", lastLocation)
+        }, [checkLastLocation])
+
+
+   
 
 
     // LOCATION LIST
@@ -74,8 +88,8 @@ const ParkingHistory = ({route, navigation}) => {
         <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                    latitude: route.params.latitude || 37.78825,
-                    longitude: route.params.longitude ||-122.4324,
+                    latitude: lastLocation[0],
+                    longitude: lastLocation[1],
                     latitudeDelta: 0.1922,
                     longitudeDelta: 2.5421}}
                     >

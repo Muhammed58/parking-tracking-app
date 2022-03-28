@@ -15,19 +15,7 @@ const Settings = (props) => {
     const { open } = actionButton;
 
     const navigation = useNavigation()
-    const route = useRoute()
 
-    //get profile information
-    const [profile, setProfile] = useState({})
-    /* useEffect(async() => {
-        let token = await SecureStore.getItemAsync(LOGIN_KEY);
-        await axios.get(GET_PROFILE,{ headers: {"Authorization" : `Bearer ${token}`} })
-        .then((res)=>{
-            setProfile(res.data)
-        })
-        .catch(err => console.log(err))
-    }, [route]) */
-    
     
     const handleProfilePage = () => {
         navigation.navigate('ProfilePage', {props})
