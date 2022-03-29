@@ -1,11 +1,10 @@
-import React, {useState} from 'react'
+import React from 'react'
 import GoBackButton from './subScreens/GoBackButton'
-import {View, Text, Dimensions, StyleSheet, TextInput, Pressable, Image} from 'react-native'
+import {View, Text, Dimensions, StyleSheet, TextInput, Image} from 'react-native'
 
 
 
-
-const labels =["name", "email", "gender", "country"]
+const labels =["name", "email","number of Parking"]
 const inputBoxSizes =[ 0.45, 0.57, 0.69, 0.81  ]
 const labelSizes =[ 0.4, 0.52, 0.64, 0.76]
 
@@ -13,7 +12,7 @@ const ProfilePage = ({route, navigation}) => {
 
     const vectorBackground = require('../assets/images/vector.png')
     const userCircleIcon = require('../assets/images/user.png')
-        console.log("this is route parms in profile ", route.params.props.profile)
+
   return (
       <View style={styles.container}>
           
@@ -30,27 +29,30 @@ const ProfilePage = ({route, navigation}) => {
         {labels.map((value,index)=>{
             return(
                 <React.Fragment key={index}>
-                    <View style={[styles.inputLabels, { top: height * labelSizes[index]}]}>
-                        <Text style={styles.inputLabelText}>{value[0].toUpperCase() + value.substring(1)}</Text>
-                    </View>
-                    <TextInput autoCapitalize='words' editable={false}
-                           style={[styles.inputBoxes,{ top: height * inputBoxSizes[index]}]}>{Object.values(route.params.props.profile)[index+1]}</TextInput>
+                    {index === 2 ? (
+                        <>
+                        <View style={[styles.inputLabels, { top: height * labelSizes[index]}]}>
+                            <Text style={styles.inputLabelText}>{value[0].toUpperCase() + value.substring(1)}</Text>
+                        </View>
+                        <TextInput autoCapitalize='words' editable={false}
+                                    style={[styles.inputBoxes,{ top: height * inputBoxSizes[index]}]}>{route.params.props.locationList.length}</TextInput>
+                    
+                        </>
+                    
+                    ) : (
+                        <>
+                        <View style={[styles.inputLabels, { top: height * labelSizes[index]}]}>
+                            <Text style={styles.inputLabelText}>{value[0].toUpperCase() + value.substring(1)}</Text>
+                        </View>
+                        
+                        <TextInput autoCapitalize='words' editable={false}
+                                    style={[styles.inputBoxes,{ top: height * inputBoxSizes[index]}]}>{Object.values(route.params.props.profile)[index+1]}</TextInput>
+                        
+                        </>
+                    )}
                 </React.Fragment>
             )
         })}
-
-        <Pressable  style={
-            ({pressed}) =>[
-                { shadowColor:"black", 
-                shadowRadius:2,
-                shadowOpacity: pressed? 0.1: 0.9,
-                shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
-                transform:[pressed ? {translateY: 10}:{ translateY:0}]
-                },
-            styles.updateProfile]}>
-            <Text style={styles.updateProfileText}>Update Profile</Text>
-        </Pressable>
-
 
         <GoBackButton/>
       </View>

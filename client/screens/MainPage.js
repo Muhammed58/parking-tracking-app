@@ -139,7 +139,7 @@ export default function MainPage ({route, navigation}) {
                     <Text style={styles.parkHereText}>Park Here!</Text>
                 </View>
             </Pressable>
-            <Settings profile={profileInfo}/>
+            <Settings profile={profileInfo} locationList={locationList}/>
 
             { errorMessage && <ErrorPage errorMessage={"error Message"}/>}
         </View>

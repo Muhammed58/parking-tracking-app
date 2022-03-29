@@ -72,6 +72,13 @@ export default function App({ navigation }) {
           let email = await SecureStore.getItemAsync(USER_NAME)
           let loginPassword = await SecureStore.getItemAsync(USER_PASSWORD)
           authContext.signIn({email,loginPassword})
+                      .then(res=> {
+                           if(res.response.status ==401){
+                              authContext.signOut()
+                              }
+                            console.log(res)
+                      })
+                      .catch(err=>{ console.log(err)})
         }
         console.log("userTokennn ", userToken )
       } catch (e) {

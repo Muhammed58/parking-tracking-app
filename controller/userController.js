@@ -10,6 +10,7 @@ const generateToken = (id) => {
     });
 };
 
+
 /**
  * 
  *  Register a new user 
