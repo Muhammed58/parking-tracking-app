@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
         fontSize:width * 0.04,
         fontFamily:"Rakkas",
         backgroundColor:"white",
+        color:"black",
         borderWidth:1,
         borderRadius:10,
         shadowColor:'black',
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     
     inputLabelText:{
         fontFamily:"Rakkas",
-        fontSize: width * 0.05
+        fontSize: width * 0.05,
     },
     
     updateProfile:{

@@ -32,8 +32,8 @@ const Settings = (props) => {
             <Portal>
                 <FAB.Group
                 open={open}
-                style={{fontFamily:"Rakkas",}}
-                fabStyle={{backgroundColor:'black', elevation:10, zIndex:20, borderColor:'lightgray', borderWidth:3}}
+                style={{fontFamily:"Rakkas", elevation:10, zIndex:5,}}
+                fabStyle={{backgroundColor:'black', elevation:10, zIndex:5, borderColor:'lightgray', borderWidth:3}}
                 color='#FFCC56'
                 icon={open ? 'close' : 'account'}
                 actions={[

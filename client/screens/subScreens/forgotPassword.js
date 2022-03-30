@@ -111,7 +111,7 @@ return (
                     <KeyboardAvoidingView       
                         style={styles.authContainer}
                         keyboardVerticalOffset={5}
-                        behavior={ Platform.OS === 'ios'? 'position': 'position'} >
+                        behavior={'position'} >
                          
                         <Image style={styles.womenImage} source={womenImage}/>
                         <Image style={styles.manImage} source={manImage}/>
@@ -131,6 +131,7 @@ return (
                                     placeholder={"Type your email"}
                                     textContentType="emailAddress"
                                     autoCapitalize="none"
+                                    onPressIn={ ()=>Platform.OS ==="android" && Keyboard.dismiss()}
                                     onChangeText={ value => setEnterEmail(value)}
                                     value={enterEmail}
                                     />
@@ -145,6 +146,7 @@ return (
                                     style={styles.passwordInput}
                                     onChangeText={value2 => setPassword(value2)}
                                     placeholder={"Type your password"}
+                                    onPressIn={ ()=>Platform.OS ==="android" && Keyboard.dismiss()}
                                     value={ loginPassword }
                                     />
                             </View>

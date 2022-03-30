@@ -98,7 +98,7 @@ export default function MainPage ({route, navigation}) {
                     shadowOpacity: pressed ? 0.1 : 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10}:{ translateY:0}],
-                    },
+                },
                 styles.parkingHistoryContainer]}
                 onPress={handleParkingHistory}>
                 <Image source={parkingHistory} style={styles.parkingHistoryImage}/>
@@ -113,7 +113,7 @@ export default function MainPage ({route, navigation}) {
                     shadowOpacity: pressed? 0.1: 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10}:{ translateY:0}]
-                    },styles.currentParkingContainer]}
+                },styles.currentParkingContainer]}
                     onPress={handleCurrentParking}>
 
                 <Image source={currentParking} style={styles.currentParkingImage}/>
@@ -126,14 +126,14 @@ export default function MainPage ({route, navigation}) {
             <Pressable activeOpacity={0.6} onPress={()=>{
                 navigation.navigate('ParkHere')
             }} style={
-                 ({pressed}) =>[
+                ({pressed}) =>[
                     { shadowColor:"black", 
                     shadowRadius:2,
                     shadowOpacity: pressed? 0.1: 0.9,
                     shadowOffset: pressed ? {width:0, height:1} : {width:0, height:3},
                     transform:[pressed ? {translateY: 10}:{ translateY:0}]
-                    },
-                    styles.parkHereContainer]}>
+                },
+                styles.parkHereContainer]}>
                 <Image source={parkHere} style={styles.parkHereImage}/>
                 <View style={styles.parkHereTextContainer}>
                     <Text style={styles.parkHereText}>Park Here!</Text>
@@ -146,7 +146,7 @@ export default function MainPage ({route, navigation}) {
      )}
      </>
     )
-
+    
 }
 
 //Get screen height and width for responsive
@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
         height: height * 0.2,
         alignItems:"center",
         justifyContent:"center",
-        elevation:1,
         top: height * -0.58,
         left: width * -0.22,
     },
@@ -232,7 +231,6 @@ const styles = StyleSheet.create({
     parkHereContainer:{
         position:"relative",
         width: width * 0.6,
-        elevation:1,
         height: height * 0.2,
         alignItems:"center",
         justifyContent:"center",
