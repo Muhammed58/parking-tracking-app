@@ -75,7 +75,7 @@ export const registerUser = (props) => {
             .then(res=>{
                 if(res.status === 201){
                     setUserCreated(true)
-                    setTimeout(() => { navigation.navigate('MainPage'), 
+                    setTimeout(() => { 
                                 setUserCreated(false) 
                                 save("user", res.data.token)
                                 toggleRegisterBox(); 

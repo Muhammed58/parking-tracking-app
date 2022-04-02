@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-const locationSchema = mongoose.Schema(
-    {
+const locationSchema = mongoose.Schema({
         userID:{
             type: String,
             required: true

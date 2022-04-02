@@ -1,15 +1,36 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
+import { resetPassword, requestPasswordReset } from '../services/auth.service.js';
 
 // Generate Token 
-
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET,{
-        expiresIn: '1d',
+        expiresIn: '60d',
     });
 };
 
+
+/**
+ * Reset Password
+**/
+
+export const resetPasswordRequestController = async (req, res, next) => {
+    const requestPasswordResetService = await requestPasswordReset(
+      req.body.email
+    );
+    return res.json(requestPasswordResetService);
+  };
+  
+export const resetPasswordController = async (req, res, next) => {
+    const resetPasswordService = await resetPassword(
+      req.body.userId,
+      req.body.token,
+      req.body.password
+    );
+    return res.json(resetPasswordService);
+  };
+  
 
 /**
  * 

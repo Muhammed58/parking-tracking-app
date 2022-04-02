@@ -1,17 +1,15 @@
 import React, {useState, useEffect} from 'react'
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import GoBackButton from './subScreens/GoBackButton';
 import { ErrorPage } from './subScreens/ErrorPage.js';
-import moment from 'moment'
 import getNetworkInfo from './subScreens/HandleNetworkError.js'
-import { deleteLocationRequest, getLastLocation, getLocationList } from '../api.js'
-
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
-
-
+import { deleteLocationRequest, getLastLocation, getLocationList } from '../api.js'
+import moment from 'moment'
 
 
 const ParkingHistory = ({route, navigation}) => {
+
 
     // LOCATIONS TO BE DELETED
     const [deleteLocation, setDeleteLocation] = useState('')
@@ -19,6 +17,7 @@ const ParkingHistory = ({route, navigation}) => {
     const [displayOptions, setDisplayOptions] = useState(false)
     
 
+    // HANDLE DELETE LOCATION
     const handleDeleteLocation = async() =>{
         setCheckLastLocation(checkLastLocation? false : true)
         await deleteLocationRequest(deleteLocation)        
@@ -30,7 +29,6 @@ const ParkingHistory = ({route, navigation}) => {
     }
 
 
-    
     // GET UPDATED LOCATION LIST AFTER DELETE ONE
     const getUpdatedLocations = async() =>{
          await getLocationList()
@@ -39,10 +37,10 @@ const ParkingHistory = ({route, navigation}) => {
     }
 
 
-
     //HANDLE ERROR MESSAGES
     const [errorMessage, setErrorMessage] = useState(false)
     const [errorMessageText, setErrorMessageText] = useState('Error')
+
 
     // HANDLE INTERNET CONNECTION ERROR
     const [checkInternetConnection, setCheckInternetConnection] = useState(false)
@@ -53,6 +51,7 @@ const ParkingHistory = ({route, navigation}) => {
        }
     }, [checkInternetConnection])
 
+
     // SET LAST LOCATION DATA
     const [lastLocation, setLastLocation] = useState([route.params.latitude, route.params.longitude])
     const [checkLastLocation, setCheckLastLocation] = useState(false)
@@ -60,12 +59,7 @@ const ParkingHistory = ({route, navigation}) => {
             getLastLocation()            
             .then((res) => {setLastLocation(res.data.location);})
             .catch(err=> {console.log(err);})
-            console.log("it works")
-            console.log("last location ", lastLocation)
         }, [checkLastLocation])
-
-
-   
 
 
     // LOCATION LIST
@@ -79,11 +73,8 @@ const ParkingHistory = ({route, navigation}) => {
     }, [listOfLocations])
 
 
-
   return (
-      
     <View style={styles.container}>
-
 
         <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
@@ -95,7 +86,6 @@ const ParkingHistory = ({route, navigation}) => {
                     >
                         
                 {listOfLocations.map((value, index)=>{
-
                     return(
 
                         <Marker key={index} 
@@ -105,9 +95,8 @@ const ParkingHistory = ({route, navigation}) => {
                                 onPress={()=> {setDeleteLocation(value._id), setWantDelete(true), setDisplayOptions(false)}}
                             />
                     )
-
                 })}
-                
+    
         </MapView>
 
 
@@ -122,9 +111,7 @@ const ParkingHistory = ({route, navigation}) => {
                 [styles.deleteLocation]]}
                 onPress={()=>{setDisplayOptions(true),setWantDelete(false)}}
                 >
-
                     <Text style={styles.deleteLocationText}>Delete this location?</Text>
-                
                 </Pressable>}
 
             
@@ -138,10 +125,8 @@ const ParkingHistory = ({route, navigation}) => {
                     },
                 [styles.cancelDeleteContainer]]}
                 onPress={()=> {setDisplayOptions(false), setWantDelete(true)}}
-                >
-                    
+                > 
                     <Text style={styles.cancelDeleteContainerText}>Cancel</Text>
-                
                 </Pressable>
             }
             
@@ -158,16 +143,16 @@ const ParkingHistory = ({route, navigation}) => {
                 onPress={handleDeleteLocation}
                 >
                     <Text style={styles.allowDeleteContainerText}>Delete</Text>
-                </Pressable>}
-
+                </Pressable>
+            }
           
             { errorMessage && <ErrorPage errorMessage={errorMessageText}/>}
             
             <GoBackButton/>
-
     </View>
   )
 }
+
 
 //Get screen height and width for responsive
 const width = Dimensions.get('window').width;

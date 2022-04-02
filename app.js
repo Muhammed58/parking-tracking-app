@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import router from './routes/userRoutes.js';
 import locationRouter from './routes/locationRoutes.js';
+import { engine } from "express-handlebars"
 
 dotenv.config();
 
@@ -11,12 +12,17 @@ const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
+
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './utils/template');
 app.get('/', (req, res) =>{
-    res.send('app runningg....')
+    res.render("resetPasswordForm");
 })
 
 app.use('/location', locationRouter)

@@ -19,6 +19,7 @@ import { TouchableOpacity,
     TextInput, KeyboardAvoidingView, Platform,
     LayoutAnimation, UIManager, ActivityIndicator
      } from 'react-native';
+import { sendPasswordResetEmail } from '../../api.js';
 
 
 
@@ -51,6 +52,13 @@ export const LoginPanel = ({navigation}) =>{
     //spinner
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     
+    const [requestResetEmail, setRequestResetEmail] = useState("")
+
+    const handleRequestResetEmail= () =>{
+        sendPasswordResetEmail(requestResetEmail)
+            .then(res=>console.log(res))
+            .catch(err=> console.log(err))
+    }
     // HANDLE SIGN IN BUTTON
     const arriveState = React.useContext(AuthContext) 
     const handleSignIn = async() => {
@@ -101,7 +109,7 @@ export const LoginPanel = ({navigation}) =>{
     Rakkas: require('../../assets/fonts/Rakkas-Regular.ttf')
   })
 
-  if (!loaded) {
+  if (!loaded) { 
     // We haven't finished checking for the token yet
     return <SplashScreen />;
   }
@@ -184,47 +192,15 @@ return (
                                     placeholder={"Type your email"}
                                     textContentType="emailAddress"
                                     autoCapitalize="none"
+                                    onChangeText={(e) => setRequestResetEmail(e)}
                                     />
                             </View>
 
-                            <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{toggleEnterCodeBox(); toggleSendCodeBox()}} activeOpacity={.8} >
-                                <Text style={styles.buttonText}>Send Code</Text>
+                            <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{handleRequestResetEmail(); toggleEnterCodeBox(); toggleSendCodeBox()}} activeOpacity={.8} >
+                                <Text style={styles.buttonText}>Send Email</Text>
                             </TouchableOpacity>  
                         </View>
                        
-        {/* enter code from email */}
-                        <View style={[styles.input2, enterCodePosition === 'right'? null : styles.moveLeft]}>
-                            <TouchableOpacity style={styles.goBackContainer} onPress={()=> {toggleLoginBox(); toggleEnterCodeBox(); setValue()}}>
-                                <FontAwesomeIcon icon={ faCaretLeft } size ={ 35 } style={ styles.goBackIcon }/>
-                                <Text style={styles.goBackText} >Go Back!</Text>
-                            </TouchableOpacity>
-                                {/* Email input */}
-                            <View style={styles.enterCodeBox}>
-                                    <CodeField
-                                        ref={ref}
-                                        {...props}
-                                        // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
-                                        value={value}
-                                        onChangeText={setValue}
-                                        cellCount={CELL_COUNT}
-                                        keyboardType='number-pad'
-                                        rootStyle={styles.codeFieldRoot}
-                                        textContentType="oneTimeCode"
-                                        renderCell={({index, symbol, isFocused}) => (
-                                        <Text
-                                            key={index}
-                                            style={[styles.cell, isFocused && styles.focusCell]}
-                                            onLayout={getCellOnLayoutHandler(index)}>
-                                            {symbol || (isFocused ? <Cursor /> : null)}
-                                        </Text>
-                                    )}/>
-                                  
-                            </View>
-                                    <TouchableOpacity style={styles.sendCodeButton} onPress={()=> { alert(value); setValue()}} activeOpacity={.8} >
-                                        <Text style={styles.buttonText}>Enter Code</Text>
-                                    </TouchableOpacity>
-                            </View>
-
                             {/* Call Register User Component  */}
                             <RegisterUser boxPosition={registerBoxPosition} loginbox={setLoginBoxPosition}/>
 

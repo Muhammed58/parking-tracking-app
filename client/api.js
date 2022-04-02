@@ -8,6 +8,11 @@ export const postSignIn = async(enterEmail, loginPassword) =>{
    return await axios.post(LOGIN_URL, { email: enterEmail, password: loginPassword })
 }
 
+// ************* SEND PASSWORD RESET EMAIL *************
+export const sendPasswordResetEmail = async(enterEmail) =>{
+   return await axios.post("http://localhost:8080/users/auth/requestResetPassword", { email: enterEmail})
+}
+
 // ************* SET LAST LOCATION DATA *************
 export const postSignUp = async(name, email, passwordState ) =>{
     return await axios.post(REGISTER_USER, { name: name, email: email, password: passwordState})
