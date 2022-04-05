@@ -11,6 +11,7 @@ import {
   deleteUser,
   resetPasswordRequestController,
   resetPasswordController,
+  resetPasswordFormRequest,
 } from '../controller/userController.js';
 
 const router = express.Router();
@@ -19,6 +20,7 @@ const router = express.Router();
 router.route('/').post(registerUser);
 router.route('/login').post(authUser);
 router.post("/auth/requestResetPassword", resetPasswordRequestController);
+router.get("/passwordReset", resetPasswordFormRequest)
 router.post("/auth/resetPassword", resetPasswordController);
  
 //Protect

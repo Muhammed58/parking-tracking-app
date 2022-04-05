@@ -21,6 +21,10 @@ export const resetPasswordRequestController = async (req, res, next) => {
     );
     return res.json(requestPasswordResetService);
   };
+
+export const resetPasswordFormRequest = async (req, res, next) =>{
+    res.render('resetPasswordForm')
+}
   
 export const resetPasswordController = async (req, res, next) => {
     const resetPasswordService = await resetPassword(
