@@ -79,8 +79,8 @@ const ParkingHistory = ({route, navigation}) => {
         <MapView style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 initialRegion={{
-                    latitude: lastLocation[0],
-                    longitude: lastLocation[1],
+                    latitude: lastLocation[0] || 37.78825,
+                    longitude: lastLocation[1] ||-122.4324,
                     latitudeDelta: 0.1922,
                     longitudeDelta: 2.5421}}
                     >

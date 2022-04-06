@@ -61,7 +61,7 @@ export const resetPassword = async (userId, token, password) => {
           link: link,
         },
         "./utils/template/requestResetPassword.handlebars"
-      ).then((res)=>console.log("this", res)).catch(err=>console.log(err))
+      ).then((res)=>console.log(res)).catch(err=>console.log(err))
 
     return link;
   };

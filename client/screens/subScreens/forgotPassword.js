@@ -48,16 +48,24 @@ export const LoginPanel = ({navigation}) =>{
     const [enterEmail, setEnterEmail] = useState("")
     const [loginPassword, setPassword] = useState("")
     const [invalidErr, setInvalidErr] = useState(false)
+    const [sendEmailInvalidErrState, setsendEmailInvalidErrState] = useState(false)
+    const [successEmailSend, setsuccessEmailSend] = useState(false)
 
     //spinner
     const [loadingSpinner, setLoadingSpinner] = useState(false)
     
     const [requestResetEmail, setRequestResetEmail] = useState("")
 
-    const handleRequestResetEmail= () =>{
-        sendPasswordResetEmail(requestResetEmail)
-            .then(res=>console.log(res))
-            .catch(err=> console.log(err))
+    const handleRequestResetEmail= async() =>{
+        setLoadingSpinner(true)
+        await sendPasswordResetEmail(requestResetEmail)
+            .then(res=>{
+                if(res.status == 200){
+                    setsuccessEmailSend(true)
+                    setLoadingSpinner(false)
+                }
+            })
+            .catch(err=>{ setsendEmailInvalidErrState(true), console.log("this", err)})
     }
     // HANDLE SIGN IN BUTTON
     const arriveState = React.useContext(AuthContext) 
@@ -124,14 +132,14 @@ return (
                         <Image style={styles.womenImage} source={womenImage}/>
                         <Image style={styles.manImage} source={manImage}/>
           
-        {/* Email and password Auth */}
+       
                         <View style={[!loadingSpinner ? styles.hiddenLoadingSpinner : styles.loadingSpinner]}>
                             <ActivityIndicator size="large" color= "#064635"/>
                         </View>
                         <View style={[styles.input, loginBoxPosition === 'left'? styles.moveLeft : styles.moveRight]}>
                             <Text style={[invalidErr === true ? styles.invalidErr : styles.validlogin]}>Invalid Email or Password</Text>
                                 
-                            {/* Email input */}
+                    
                             <View style={styles.emailInputBox1}>
                                 <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
                                 <TextInput
@@ -145,7 +153,7 @@ return (
                                     />
                             </View>
 
-                            {/* Password Input */}
+                    
                             <View style={styles.passwordInputBox1}>
                                 <FontAwesomeIcon icon={ faLock } size ={ 25 } style={ styles.passwordIcon }/>
                                 <TextInput
@@ -176,15 +184,15 @@ return (
                             </Text>
                         </View>
 
-                     
-        {/* SendCode to the email */}
+        
+
                         <View style={[styles.input1, styles.box, sendCodePosition === 'right'? null : styles.moveLeft]}>
                             <TouchableOpacity style={styles.goBackContainer} onPress={()=> {toggleLoginBox(); toggleSendCodeBox()}}>
                                 <FontAwesomeIcon icon={ faCaretLeft } size ={ 35 } style={ styles.goBackIcon }/>
                                 <Text style={styles.goBackText} >Go Back!</Text>
                             </TouchableOpacity>
                             
-                            {/* Email input */}
+                   
                             <View style={styles.emailInputBox}>
                                 <FontAwesomeIcon icon={ faEnvelope } size ={ 25 } style={ styles.emailIcon }/>
                                 <TextInput
@@ -195,14 +203,22 @@ return (
                                     onChangeText={(e) => setRequestResetEmail(e)}
                                     />
                             </View>
+                            <View style={[!loadingSpinner ? styles.hiddenLoadingSpinner : styles.loadingSpinner]}>
+                                <ActivityIndicator size="large" color= "#064635"/>
+                            </View>
 
-                            <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{handleRequestResetEmail(); toggleEnterCodeBox(); toggleSendCodeBox()}} activeOpacity={.8} >
+                            <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{handleRequestResetEmail();}} activeOpacity={.8} >
+                                <Text style={[sendEmailInvalidErrState === true ? styles.sendEmailInvalidErr : styles.validlogin]}>Invalid Email or Password</Text>
                                 <Text style={styles.buttonText}>Send Email</Text>
                             </TouchableOpacity>  
+                        <View style={[styles.successEmailSend, successEmailSend == true && styles.moveLeft]}>
+                            <Text style={{fontFamily:"Rakkas", color:"green", fontSize:width *0.05,}}>Email sent, please check your email.</Text>
+                            <Text style={{fontFamily:"Rakkas", color:"green", fontSize:width *0.05,}}> It may take a couple of minutes</Text>
+                        </View>
                         </View>
                        
-                            {/* Call Register User Component  */}
-                            <RegisterUser boxPosition={registerBoxPosition} loginbox={setLoginBoxPosition}/>
+                        
+                        <RegisterUser boxPosition={registerBoxPosition} loginbox={setLoginBoxPosition}/>
 
                     </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -280,6 +296,13 @@ const styles = StyleSheet.create({
         color:"red",
         fontFamily:"Rakkas",
         top: width * -0.006,
+    },
+    sendEmailInvalidErr:{
+        position:"absolute",
+        fontSize:17,
+        top: height * -0.03,
+        color:"red",
+        fontFamily:"Rakkas",
     },
 
     validlogin:{
@@ -399,10 +422,29 @@ const styles = StyleSheet.create({
         fontFamily:"Rakkas",
     },
 
+    successEmailSend:{
+        position: "absolute",
+        width: width,
+        height: height * 0.27,
+        top: height * 0,
+        right: width * -1.5,
+        borderRadius: 40,
+        backgroundColor: "#FFCC56",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        elevation:4,
+        shadowOpacity: 0.39,
+        shadowRadius: 8.30,
+        justifyContent: "center",
+        alignItems: "center",
+    },
     input1:{
         position: "relative",
         width: "99%",
-        height: height * 0.23,
+        height: height * 0.27,
         left: width * 1.1,
         top: Platform.OS === "ios" ? height * -0.70: height * -0.70,
         borderRadius: 40,

@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
         position: "relative",
         width: "99%",
         height: height * 0.57,
-        top: Platform.OS === "ios" ? height * -1.39: height * -1.39,
+        top: Platform.OS === "ios" ? height * -1.15: height * -1.15,
         borderRadius: 40,
         backgroundColor: "white",
         shadowColor: "#000",
