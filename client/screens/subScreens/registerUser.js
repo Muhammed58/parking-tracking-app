@@ -70,30 +70,36 @@ export const registerUser = (props) => {
             alert("Please Enter Password")
         }
         else if (repeatPassword === passwordState){
-           
-            postSignUp(name, email, passwordState)
-            .then(res=>{
-                if(res.status === 201){
-                    setUserCreated(true)
-                    setTimeout(() => { 
-                                setUserCreated(false) 
-                                save("user", res.data.token)
-                                toggleRegisterBox(); 
-                                props.loginbox("left");
-                                setName('');
-                                setEmail('');
-                                setPasswordState('')
-                                setRepeatPassword('')
-                            }, 
-                                1000); 
-                }
-               }
-                )
-            .catch(err => {
-                if(err.response.status === 400) {
-                    alert("User already exist")
+            const checkList =["@",".com"]
+            let emailAddress = email.split(' ').join('')
+            if(emailAddress.includes(checkList[0]) && emailAddress.includes(checkList[1])){
+                postSignUp(name, email, passwordState)
+                .then(res=>{
+                    if(res.status === 201){
+                        setUserCreated(true)
+                        setTimeout(() => { 
+                                    setUserCreated(false) 
+                                    save("user", res.data.token)
+                                    toggleRegisterBox(); 
+                                    props.loginbox("left");
+                                    setName('');
+                                    setEmail('');
+                                    setPasswordState('')
+                                    setRepeatPassword('')
+                                }, 
+                                    1000); 
                     }
-                })
+                   }
+                    )
+                .catch(err => {
+                    if(err.response.status === 400) {
+                        alert("User already exist")
+                        }
+                    })
+                
+            }else{
+                alert("Enter Valid Email Address")
+           }
 
         }else{ alert("Password deoesn't match")}
     }
@@ -231,7 +237,7 @@ const styles = StyleSheet.create({
         position: "relative",
         width: "99%",
         height: height * 0.57,
-        top: Platform.OS === "ios" ? height * -1.15: height * -1.15,
+        top: height * -1.18,
         borderRadius: 40,
         backgroundColor: "white",
         shadowColor: "#000",

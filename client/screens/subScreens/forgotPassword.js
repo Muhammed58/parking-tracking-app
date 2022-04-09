@@ -63,9 +63,17 @@ export const LoginPanel = ({navigation}) =>{
                 if(res.status == 200){
                     setsuccessEmailSend(true)
                     setLoadingSpinner(false)
+                    setTimeout(() => {
+                        toggleLoginBox(); 
+                        toggleSendCodeBox()
+                        setsuccessEmailSend(false)
+                    }, 2000);
                 }
             })
-            .catch(err=>{ setsendEmailInvalidErrState(true), console.log("this", err)})
+            .catch(err=>{ 
+                setLoadingSpinner(false)
+                setsendEmailInvalidErrState(true), 
+                console.log("this", err)})
     }
     // HANDLE SIGN IN BUTTON
     const arriveState = React.useContext(AuthContext) 
@@ -201,13 +209,14 @@ return (
                                     textContentType="emailAddress"
                                     autoCapitalize="none"
                                     onChangeText={(e) => setRequestResetEmail(e)}
+                                    value={requestResetEmail}
                                     />
                             </View>
                             <View style={[!loadingSpinner ? styles.hiddenLoadingSpinner : styles.loadingSpinner]}>
                                 <ActivityIndicator size="large" color= "#064635"/>
                             </View>
 
-                            <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{handleRequestResetEmail();}} activeOpacity={.8} >
+                            <TouchableOpacity style={styles.sendCodeButton} onPress={() =>{handleRequestResetEmail();setRequestResetEmail("")}} activeOpacity={.8} >
                                 <Text style={[sendEmailInvalidErrState === true ? styles.sendEmailInvalidErr : styles.validlogin]}>Invalid Email or Password</Text>
                                 <Text style={styles.buttonText}>Send Email</Text>
                             </TouchableOpacity>  
