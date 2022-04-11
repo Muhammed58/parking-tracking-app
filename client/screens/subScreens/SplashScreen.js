@@ -1,17 +1,17 @@
 import React from 'react'
 import { View, Text, ActivityIndicator } from 'react-native'
 import { useFonts } from 'expo-font'
+import Rakkas from '../../assets/fonts/fonts.js'
 
 const SplashScreen = (props) => {
  
    let [loaded] = useFonts({
-       Rakkas: require('../../assets/fonts/Rakkas-Regular.ttf')
+       Rakkas: Rakkas
    })
 
    if(!loaded){
        return null;
    }
-  
   return (
     <View style={{
         alignItems:"center", 

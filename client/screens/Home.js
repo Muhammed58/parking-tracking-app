@@ -8,29 +8,25 @@ import { ImageBackground, Dimensions, View,
         StyleSheet,  Keyboard, TouchableWithoutFeedback,
          } from 'react-native';
 import SplashScreen from './subScreens/SplashScreen.js';
-
+import Rakkas from '../assets/fonts/fonts.js'
          
 
 export default function Home({navigation}) {
 
-    //Fonts define
-    const[loaded] = useFonts({
-        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
-    })
-
+    
     // Main page background image path
     const image = require('../assets/images/backgroundCars.jpg')
     
     //isLoading page
     const [isLoading, setisLoading] = useState(true)
-
-
+    
+    
     useEffect(() => {
-      setTimeout(() => {
-          setisLoading(false)
-      }, 1000);
+        setTimeout(() => {
+            setisLoading(false)
+        }, 1000);
     }, [navigation])
-
+    
     // Closes the keyboard when clicking anywhere other than input
     const KeyboardDismiss = ({ children }) => (
         <TouchableWithoutFeedback onPress = { ()=> Keyboard.dismiss() }>
@@ -38,8 +34,12 @@ export default function Home({navigation}) {
         </TouchableWithoutFeedback>
     );
     
+    //Fonts define
+    const[loaded] = useFonts({
+        Rakkas: Rakkas
+    })
     if (!loaded) {
-        return null;
+        <SplashScreen/>
     }
     return (
         <>

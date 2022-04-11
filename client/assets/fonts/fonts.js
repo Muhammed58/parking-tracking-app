@@ -1,0 +1,1 @@
+export const Rakkas = require('../fonts/Rakkas-Regular.ttf')

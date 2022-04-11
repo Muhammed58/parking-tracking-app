@@ -9,7 +9,7 @@ export const resetPassword = async (userId, token, password) => {
     if (!passwordResetToken) {
       throw new Error("Invalid or expired password reset token");
     }
-    const isValid = await bcrypt.compare(token, passwordResetToken.token);
+    const isValid = await bcrypt.compare(token, passwordResetToken.token)
     if (!isValid) {
       throw new Error("Invalid or expired password reset token");
     }

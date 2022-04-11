@@ -7,6 +7,7 @@ import GoBackButton from './subScreens/GoBackButton.js'
 import { sendLocation } from '../api.js'
 import { ErrorPage } from './subScreens/ErrorPage.js';
 import SplashScreen from './subScreens/SplashScreen.js'
+import Rakkas from '../assets/fonts/fonts.js'
 
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {View, Text, StyleSheet, 
@@ -16,10 +17,7 @@ import {View, Text, StyleSheet,
     } from 'react-native'
 
 export default function ParkHere({navigation}){
-      //Fonts define
-      const[loaded] = useFonts({
-        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
-    })
+     
 
     //Handle with location
     const [location, setLocation] = useState(null);
@@ -60,10 +58,15 @@ export default function ParkHere({navigation}){
     //HANDLE ERROR MESSAGES
     const [errorMessage, setErrorMessage] = useState(false)
 
-    //If font loaded then render component
-    if (!loaded) {
-        return null;
-    }
+
+    //Fonts define
+    let [loaded] = useFonts({
+        Rakkas: Rakkas
+    })
+
+     if(!loaded){
+         <SplashScreen/>
+     }
     return (
         <>
         {!location ? ( 

@@ -8,6 +8,8 @@ import { ErrorPage } from './subScreens/ErrorPage.js';
 import {View, Text, StyleSheet, 
     Dimensions, Pressable,
 } from 'react-native'
+import SplashScreen from './subScreens/SplashScreen.js';
+import Rakkas from '../assets/fonts/fonts.js'
 
 
 
@@ -43,12 +45,12 @@ export default function ParkHere({route,navigation}){
 
     //FONT DEFINE
     const[loaded] = useFonts({
-        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
+        Rakkas: Rakkas
     })
 
     //RENDER AFTER FONT LOADED
     if (!loaded) {
-        return null;
+        <SplashScreen/>
     }
   return (
 

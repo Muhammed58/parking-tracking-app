@@ -7,11 +7,13 @@ import { ErrorPage } from './subScreens/ErrorPage.js';
 import { View, Text, Image, StyleSheet, Dimensions,
         Pressable, ActivityIndicator } from 'react-native';
 
-import { AuthContext } from './subScreens/forgotPassword.js';
+
+
 import {getLastLocation, getLocationList, getProfile} from '../api.js'
 import * as SecureStore from 'expo-secure-store';
 import { LOGIN_KEY } from '@env'
 import SplashScreen from './subScreens/SplashScreen.js';
+import Rakkas from '../assets/fonts/fonts.js'
 
 // define images
 const parkingHistory = require('../assets/images/parkingHistory.png');
@@ -75,11 +77,11 @@ export default function MainPage ({route, navigation}) {
      
     //FONTS DEFINE
     const[loaded] = useFonts({
-        Rakkas: require('../assets/fonts/Rakkas-Regular.ttf')
+        Rakkas: Rakkas
     })
     
     if (!loaded) {
-        return null;
+       <SplashScreen/>
     } 
     
     return(

@@ -1,7 +1,9 @@
 import React from 'react'
 import GoBackButton from './subScreens/GoBackButton'
 import {View, Text, Dimensions, StyleSheet, TextInput, Image} from 'react-native'
-
+import SplashScreen from './subScreens/SplashScreen'
+import Rakkas from '../assets/fonts/fonts.js'
+import { useFonts } from 'expo-font'
 
 
 const labels =["name", "email","number of Parking"]
@@ -12,7 +14,14 @@ const ProfilePage = ({route, navigation}) => {
 
     const vectorBackground = require('../assets/images/vector.png')
     const userCircleIcon = require('../assets/images/user.png')
-
+    
+    //Fonts define
+ let [loaded] = useFonts({
+   Rakkas: Rakkas
+ })
+    if(!loaded){
+        <SplashScreen/>
+    }
   return (
       <View style={styles.container}>
           

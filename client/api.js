@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store';
 import {LOGIN_KEY, GET_LASTLOCATION, GET_LOCATIONLIST, REGISTER_USER, 
-    GET_PROFILE, POST_LOCATION, DELETE_LOCATION, LOGIN_URL } from '@env'
+    GET_PROFILE, POST_LOCATION, DELETE_LOCATION, LOGIN_URL, REQUEST_RESET_PASSWORD } from '@env'
 
 // ************* SEND LOGIN INFORMATION TO SERVER *************
 export const postSignIn = async(enterEmail, loginPassword) =>{
@@ -10,7 +10,7 @@ export const postSignIn = async(enterEmail, loginPassword) =>{
 
 // ************* SEND PASSWORD RESET EMAIL *************
 export const sendPasswordResetEmail = async(enterEmail) =>{
-   return await axios.post("http://localhost:8080/users/auth/requestResetPassword", { email: enterEmail})
+   return await axios.post(REQUEST_RESET_PASSWORD, { email: enterEmail})
 }
 
 // ************* SET LAST LOCATION DATA *************

@@ -18,11 +18,11 @@ import SplashScreen from './screens/subScreens/SplashScreen'
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
- 
   //Fonts define
   let [loaded] = useFonts({
     Rakkas: require('./assets/fonts/Rakkas-Regular.ttf')
   })
+ 
 
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -60,13 +60,13 @@ export default function App({ navigation }) {
     }
   );
 
+  const [mounted, setMounted] = React.useState(true);
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
       try {
         userToken = await SecureStore.getItemAsync(LOGIN_KEY);
-
         // IF USER ALREADY LOGGED IN CREATE NEW TOKEN TO KEEP USER LOGGED IN
         if(userToken!==null){
           let email = await SecureStore.getItemAsync(USER_NAME)
@@ -90,7 +90,13 @@ export default function App({ navigation }) {
       // screen will be unmounted and thrown away.
       dispatch({ type: 'RESTORE_TOKEN', token: userToken });
     };
-    bootstrapAsync();
+    if (mounted) {
+      bootstrapAsync();
+    }
+  
+    return () => {
+      setMounted(false);
+    };
   }, []);
 
  
@@ -129,7 +135,10 @@ export default function App({ navigation }) {
   if (state.isLoading) {
     // We haven't finished checking for the token yet
     return <SplashScreen />;
-  } 
+  } else if (!loaded){
+    
+    return <SplashScreen />;
+  }
   
   return (
    <NavigationContainer>

@@ -6,6 +6,9 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { View, StyleSheet, Dimensions, Text, Pressable } from 'react-native'
 import { deleteLocationRequest, getLastLocation, getLocationList } from '../api.js'
 import moment from 'moment'
+import Rakkas from '../assets/fonts/fonts.js'
+import { useFonts } from 'expo-font';
+import SplashScreen from './subScreens/SplashScreen';
 
 
 const ParkingHistory = ({route, navigation}) => {
@@ -72,6 +75,13 @@ const ParkingHistory = ({route, navigation}) => {
         } 
     }, [listOfLocations])
 
+        //Fonts define
+ let [loaded] = useFonts({
+    Rakkas: Rakkas
+  })
+     if(!loaded){
+         <SplashScreen/>
+     }
 
   return (
     <View style={styles.container}>
