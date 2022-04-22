@@ -6,13 +6,6 @@ import { useFonts } from 'expo-font'
 import SplashScreen from './SplashScreen.js';
 
 
-import {
-    CodeField,
-    Cursor,
-    useBlurOnFulfill,
-    useClearByFocusCell,
-  } from 'react-native-confirmation-code-field';
-
 import { TouchableOpacity,  
     Dimensions, Text, View, StyleSheet,
     Image, Keyboard, TouchableWithoutFeedback,
@@ -94,15 +87,6 @@ export const LoginPanel = ({navigation}) =>{
             setLoadingSpinner(false)
        }
     }
-
-        //Code  confirmation screen
-        const CELL_COUNT = 5;
-        const [value, setValue] = useState('');
-        const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
-        const [ props, getCellOnLayoutHandler ] = useClearByFocusCell({
-          value,
-          setValue,
-        });
 
         //set box layout animations
         const toggleLoginBox = () =>{

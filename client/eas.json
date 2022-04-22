@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 0.50.0"
+  },
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {
+      "android":{
+        "serviceAccountKeyPath":"parking-tracking@pc-api-6440479554886805178-353.iam.gserviceaccount.com"
+      }
+    }
+  }
+}

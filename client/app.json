@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "client",
-    "slug": "client",
-    "version": "1.0.0",
+    "name": "Parking Tracking",
+    "slug": "carParkingTracking",
+    "version": "1.0.3",
     "icon": "./assets/images/appIcon.png",
     "orientation": "portrait",
     "splash": {
@@ -23,9 +23,8 @@
       }
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF"
-      },
+      "package":"com.car.parkingTracking",
+      "versionCode":3,
       "config":{
         "googleMaps":{
           "apiKey": "AIzaSyCyInFknQOMoOp_I6xk7fdvA7X2pWs8vuo"
