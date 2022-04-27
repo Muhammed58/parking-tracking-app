@@ -7,7 +7,8 @@
     "orientation": "portrait",
     "splash": {
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFCC56",
+      "image": "./assets/images/currentParking.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
