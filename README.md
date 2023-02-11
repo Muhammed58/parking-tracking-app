@@ -8,6 +8,9 @@ The aim of the project is to make appointments with the dietitians' consultants,
 
 [Contributing](#contributing) 
 
+You can download the application to your Android devices from the link below. Since I changed server, the application does not have a backend connection at the moment👇🏻
+https://play.google.com/store/apps/details?id=com.car.parkingTracking
+
 <a name="features"></a>
 ## Features
 - Login Page with JWT
