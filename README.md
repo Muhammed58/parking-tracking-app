@@ -12,27 +12,39 @@ The aim of the project is to make appointments with the dietitians' consultants,
 ## Features
 - Login Page with JWT
 
-<img src="https://user-images.githubusercontent.com/45498530/218237267-729c4dd9-2ace-4200-bec0-226d42835445.jpg" width="400" height="750">
+<img src="https://user-images.githubusercontent.com/45498530/218237267-729c4dd9-2ace-4200-bec0-226d42835445.jpg" width="300" height="650">
 ![park-1](https://user-images.githubusercontent.com/45498530/218237267-729c4dd9-2ace-4200-bec0-226d42835445.jpg)
 
 
 - Automatically view your current location, your last parked location, previously parked locations
-![park2](https://user-images.githubusercontent.com/45498530/218237273-a79c5ad8-ceef-4556-8a30-9af22dfaf60f.jpg)
+
+<img src="https://user-images.githubusercontent.com/45498530/218237273-a79c5ad8-ceef-4556-8a30-9af22dfaf60f.jpg" width="300" height="650">
+
 
 -  You can get your loaction coordinates in one click or you can choose
-![park3](https://user-images.githubusercontent.com/45498530/218237275-7ef93dce-ecf7-4b52-9b5d-763ab19310a6.jpg)
+
+<img src="https://user-images.githubusercontent.com/45498530/218237275-7ef93dce-ecf7-4b52-9b5d-763ab19310a6.jpg" width="300" height="650">
+
 
 - Navigate your parked location by using Google Maps and Apple Maps
-![park4](https://user-images.githubusercontent.com/45498530/218237276-4f78d629-5f9f-40b1-99bd-abedefb61f73.jpg)
+
+<img src="https://user-images.githubusercontent.com/45498530/218237276-4f78d629-5f9f-40b1-99bd-abedefb61f73.jpg" width="300" height="650">
+
 
 - Logout or display your profile
-![park5](https://user-images.githubusercontent.com/45498530/218237278-5e26ee07-223e-47d2-b1d5-0bdcffbbc697.jpg)
+
+<img src="https://user-images.githubusercontent.com/45498530/218237278-5e26ee07-223e-47d2-b1d5-0bdcffbbc697.jpg" width="300" height="650">
+
 
 - Display your location history and easily delete any of them
-![park6](https://user-images.githubusercontent.com/45498530/218237280-40330821-6fe9-45e0-b1ce-de624e2eb89e.jpg)
+
+<img src="https://user-images.githubusercontent.com/45498530/218237280-40330821-6fe9-45e0-b1ce-de624e2eb89e.jpg" width="300" height="650">
+
 
 - Example profile page
-![park7](https://user-images.githubusercontent.com/45498530/218237283-d0550a12-5157-4882-b2b5-ebc937b03473.jpg)
+
+<img src="https://user-images.githubusercontent.com/45498530/218237283-d0550a12-5157-4882-b2b5-ebc937b03473.jpg" width="300" height="650">
+
 
 
 
