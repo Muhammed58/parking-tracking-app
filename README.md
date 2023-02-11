@@ -4,7 +4,8 @@ The aim of the project is to make appointments with the dietitians' consultants,
 ##### Table of Contents  
 [Features](#features)  
 [Getting Started](#getting-started)  
-[Dependencies](#dependencies) 
+[Dependencies](#dependencies)
+
 [Contributing](#contributing) 
 
 <a name="features"></a>
