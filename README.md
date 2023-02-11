@@ -11,7 +11,7 @@ The aim of the project is to make appointments with the dietitians' consultants,
 <a name="features"></a>
 ## Features
 - Login Page with JWT
-![park-1](https://user-images.githubusercontent.com/45498530/218237267-729c4dd9-2ace-4200-bec0-226d42835445.jpg)
+![park-1](https://user-images.githubusercontent.com/45498530/218237267-729c4dd9-2ace-4200-bec0-226d42835445.jpg =400x750)
 
 
 - Automatically view your current location, your last parked location, previously parked locations
