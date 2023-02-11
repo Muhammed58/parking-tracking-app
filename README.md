@@ -1,5 +1,5 @@
 # Parking Tracking React Native App
-The aim of the project is to make appointments with the dietitians' consultants, diet follow-ups, client development analysis.
+The purpose of the application is to record where you parked and to show a historical report. Not only will you not forget where you parked, but you will also be able to take note of the affordable parking spaces you have found before.
 
 ##### Table of Contents  
 [Features](#features)  
