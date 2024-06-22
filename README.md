@@ -1,4 +1,8 @@
-# Parking Tracking React Native App
+# Parking Tracking React Native App - An UGLY project from my early coding years😀
+
+I keep sharing this to show people how bad your code can be in first years 🎉
+
+
 The purpose of the application is to record where you parked and to show a historical report. Not only will you not forget where you parked, but you will also be able to take note of the affordable parking spaces you have found before.
 
 ##### Table of Contents  
