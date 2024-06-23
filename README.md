@@ -13,6 +13,7 @@ The purpose of the application is to record where you parked and to show a histo
 [Contributing](#contributing) 
 
 You can download the application to your Android devices from the link below. Since I changed server, the application does not have a backend connection at the moment👇🏻
+
 https://play.google.com/store/apps/details?id=com.car.parkingTracking
 
 <a name="features"></a>
